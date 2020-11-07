@@ -35,5 +35,6 @@
 *.xml
 */bin/*
 */obj/*
+*obj/Debug/*
 */.vs/*
 */packages/*
