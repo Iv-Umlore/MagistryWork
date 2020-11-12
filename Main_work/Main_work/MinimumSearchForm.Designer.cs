@@ -51,10 +51,7 @@
             this.maximumXLabel = new System.Windows.Forms.Label();
             this.MinValueX = new System.Windows.Forms.TextBox();
             this.MaxValueX = new System.Windows.Forms.TextBox();
-            this.PieceCountLabel = new System.Windows.Forms.Label();
-            this.PieceCountValue = new System.Windows.Forms.TextBox();
             this.StopLabel = new System.Windows.Forms.Label();
-            this.StopCommentLabel = new System.Windows.Forms.Label();
             this.MaxSectionDistance = new System.Windows.Forms.TextBox();
             this.StartSerchButton = new System.Windows.Forms.Button();
             this.TimeToPauseLabel = new System.Windows.Forms.Label();
@@ -242,7 +239,7 @@
             // minimumXLabel
             // 
             this.minimumXLabel.AutoSize = true;
-            this.minimumXLabel.Location = new System.Drawing.Point(1202, 251);
+            this.minimumXLabel.Location = new System.Drawing.Point(1199, 235);
             this.minimumXLabel.Name = "minimumXLabel";
             this.minimumXLabel.Size = new System.Drawing.Size(69, 13);
             this.minimumXLabel.TabIndex = 19;
@@ -251,7 +248,7 @@
             // maximumXLabel
             // 
             this.maximumXLabel.AutoSize = true;
-            this.maximumXLabel.Location = new System.Drawing.Point(1334, 251);
+            this.maximumXLabel.Location = new System.Drawing.Point(1334, 235);
             this.maximumXLabel.Name = "maximumXLabel";
             this.maximumXLabel.Size = new System.Drawing.Size(72, 13);
             this.maximumXLabel.TabIndex = 20;
@@ -259,7 +256,7 @@
             // 
             // MinValueX
             // 
-            this.MinValueX.Location = new System.Drawing.Point(1265, 248);
+            this.MinValueX.Location = new System.Drawing.Point(1265, 232);
             this.MinValueX.Name = "MinValueX";
             this.MinValueX.Size = new System.Drawing.Size(63, 20);
             this.MinValueX.TabIndex = 21;
@@ -267,50 +264,24 @@
             // 
             // MaxValueX
             // 
-            this.MaxValueX.Location = new System.Drawing.Point(1399, 248);
+            this.MaxValueX.Location = new System.Drawing.Point(1399, 232);
             this.MaxValueX.Name = "MaxValueX";
             this.MaxValueX.Size = new System.Drawing.Size(63, 20);
             this.MaxValueX.TabIndex = 22;
             this.MaxValueX.Text = "10";
             // 
-            // PieceCountLabel
-            // 
-            this.PieceCountLabel.AutoSize = true;
-            this.PieceCountLabel.Location = new System.Drawing.Point(1199, 277);
-            this.PieceCountLabel.Name = "PieceCountLabel";
-            this.PieceCountLabel.Size = new System.Drawing.Size(183, 13);
-            this.PieceCountLabel.TabIndex = 23;
-            this.PieceCountLabel.Text = "Количество начальных разбиений:";
-            // 
-            // PieceCountValue
-            // 
-            this.PieceCountValue.Location = new System.Drawing.Point(1399, 274);
-            this.PieceCountValue.Name = "PieceCountValue";
-            this.PieceCountValue.Size = new System.Drawing.Size(63, 20);
-            this.PieceCountValue.TabIndex = 24;
-            this.PieceCountValue.Text = "20";
-            // 
             // StopLabel
             // 
             this.StopLabel.AutoSize = true;
-            this.StopLabel.Location = new System.Drawing.Point(1199, 300);
+            this.StopLabel.Location = new System.Drawing.Point(1199, 261);
             this.StopLabel.Name = "StopLabel";
             this.StopLabel.Size = new System.Drawing.Size(104, 13);
             this.StopLabel.TabIndex = 25;
             this.StopLabel.Text = "Признак останова:";
             // 
-            // StopCommentLabel
-            // 
-            this.StopCommentLabel.AutoSize = true;
-            this.StopCommentLabel.Location = new System.Drawing.Point(1199, 322);
-            this.StopCommentLabel.Name = "StopCommentLabel";
-            this.StopCommentLabel.Size = new System.Drawing.Size(221, 13);
-            this.StopCommentLabel.TabIndex = 26;
-            this.StopCommentLabel.Text = "(Здесь - это длинна наибольшего участка)";
-            // 
             // MaxSectionDistance
             // 
-            this.MaxSectionDistance.Location = new System.Drawing.Point(1399, 299);
+            this.MaxSectionDistance.Location = new System.Drawing.Point(1399, 258);
             this.MaxSectionDistance.Name = "MaxSectionDistance";
             this.MaxSectionDistance.Size = new System.Drawing.Size(63, 20);
             this.MaxSectionDistance.TabIndex = 27;
@@ -318,7 +289,7 @@
             // 
             // StartSerchButton
             // 
-            this.StartSerchButton.Location = new System.Drawing.Point(1202, 368);
+            this.StartSerchButton.Location = new System.Drawing.Point(1202, 310);
             this.StartSerchButton.Name = "StartSerchButton";
             this.StartSerchButton.Size = new System.Drawing.Size(260, 23);
             this.StartSerchButton.TabIndex = 28;
@@ -329,7 +300,7 @@
             // TimeToPauseLabel
             // 
             this.TimeToPauseLabel.AutoSize = true;
-            this.TimeToPauseLabel.Location = new System.Drawing.Point(1199, 345);
+            this.TimeToPauseLabel.Location = new System.Drawing.Point(1199, 287);
             this.TimeToPauseLabel.Name = "TimeToPauseLabel";
             this.TimeToPauseLabel.Size = new System.Drawing.Size(161, 13);
             this.TimeToPauseLabel.TabIndex = 29;
@@ -337,7 +308,7 @@
             // 
             // TimeToPauseValue
             // 
-            this.TimeToPauseValue.Location = new System.Drawing.Point(1399, 342);
+            this.TimeToPauseValue.Location = new System.Drawing.Point(1399, 284);
             this.TimeToPauseValue.Name = "TimeToPauseValue";
             this.TimeToPauseValue.Size = new System.Drawing.Size(63, 20);
             this.TimeToPauseValue.TabIndex = 30;
@@ -346,7 +317,7 @@
             // SearchResultLabel
             // 
             this.SearchResultLabel.AutoSize = true;
-            this.SearchResultLabel.Location = new System.Drawing.Point(1199, 403);
+            this.SearchResultLabel.Location = new System.Drawing.Point(1199, 345);
             this.SearchResultLabel.Name = "SearchResultLabel";
             this.SearchResultLabel.Size = new System.Drawing.Size(118, 13);
             this.SearchResultLabel.TabIndex = 31;
@@ -354,7 +325,7 @@
             // 
             // SearchResultValue
             // 
-            this.SearchResultValue.Location = new System.Drawing.Point(1353, 400);
+            this.SearchResultValue.Location = new System.Drawing.Point(1353, 342);
             this.SearchResultValue.Name = "SearchResultValue";
             this.SearchResultValue.ReadOnly = true;
             this.SearchResultValue.Size = new System.Drawing.Size(109, 20);
@@ -371,10 +342,7 @@
             this.Controls.Add(this.TimeToPauseLabel);
             this.Controls.Add(this.StartSerchButton);
             this.Controls.Add(this.MaxSectionDistance);
-            this.Controls.Add(this.StopCommentLabel);
             this.Controls.Add(this.StopLabel);
-            this.Controls.Add(this.PieceCountValue);
-            this.Controls.Add(this.PieceCountLabel);
             this.Controls.Add(this.MaxValueX);
             this.Controls.Add(this.MinValueX);
             this.Controls.Add(this.maximumXLabel);
@@ -431,10 +399,7 @@
         private System.Windows.Forms.Label maximumXLabel;
         private System.Windows.Forms.TextBox MinValueX;
         private System.Windows.Forms.TextBox MaxValueX;
-        private System.Windows.Forms.Label PieceCountLabel;
-        private System.Windows.Forms.TextBox PieceCountValue;
         private System.Windows.Forms.Label StopLabel;
-        private System.Windows.Forms.Label StopCommentLabel;
         private System.Windows.Forms.TextBox MaxSectionDistance;
         private System.Windows.Forms.Button StartSerchButton;
         private System.Windows.Forms.Label TimeToPauseLabel;

@@ -71,7 +71,7 @@ namespace Main_work
 
         private void StartSerchButton_Click(object sender, EventArgs e)
         {
-            var isStarted = _minExecutor.StartMinimumSearch(MinValueX.Text, MaxValueX.Text, PieceCountValue.Text, MaxSectionDistance.Text, TimeToPauseValue.Text);
+            var isStarted = _minExecutor.StartMinimumSearch(MinValueX.Text, MaxValueX.Text, MaxSectionDistance.Text, TimeToPauseValue.Text);
         }
 
         public void ClearDrawField()

@@ -14,7 +14,6 @@ namespace Main_work.HelpClasses
 
         private double _xMin, _xMax;
         private double _stopSignal;
-        private int _pieceCount;
         private int _threadPauseSize;
         private List<Interval> _intervals;
 
@@ -40,7 +39,7 @@ namespace Main_work.HelpClasses
             _currentMathMethod = newMathMethod;
         }
 
-        public bool StartMinimumSearch(string xMin, string xMax, string pieceStartCount, string stopSignal, string stopTimer)
+        public bool StartMinimumSearch(string xMin, string xMax, string stopSignal, string stopTimer)
         {
             double xMi = 0, xMa = 0;
             double ss = 0;
@@ -48,7 +47,6 @@ namespace Main_work.HelpClasses
             bool flag = true;
             flag = double.TryParse(xMin, out xMi) &&
                 double.TryParse(xMax, out xMa) &&
-                int.TryParse(pieceStartCount, out psc) &&
                 double.TryParse(stopSignal, out ss);
 
             if (!flag)
@@ -61,7 +59,6 @@ namespace Main_work.HelpClasses
             _xMin = xMi;
             _xMax = xMa;
             _stopSignal = ss;
-            _pieceCount = psc;
             
 
             SetMinMax();
@@ -128,52 +125,27 @@ namespace Main_work.HelpClasses
         /// </summary>
         private void StartScanMethodScan()
         {
-            double pieSize = (_xMax - _xMin) / _pieceCount;
-            double tmpValue = _xMin;
+            int position = 0;
 
-            // Заполнение начального массива
-            for (int iter = 0; iter < _pieceCount; iter++)
-            {
-                Thread.Sleep(_threadPauseSize);
-                var currentInterval = new Interval(_functionInfo.GetValueByXCoord(tmpValue), tmpValue, pieSize);
-                DrawNewPoint(currentInterval.XCoordValue, currentInterval.StartValue);
+            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMin), _xMin, _xMax - _xMin));
+            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMax), _xMax, 0.0));
 
-                _intervals.Add(currentInterval);
-                tmpValue += pieSize;
-            }
+            DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
+            DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
 
-            _intervals.Last().Size = _xMax - _intervals.Last().XCoordValue;
-            // добавляю значение на крайней точке
-            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(tmpValue), _xMax, 0.0));
+            var currentInterval = _intervals.First();
 
-            tmpValue = _intervals.Max(it => it.Size);
-
-            while (tmpValue > _stopSignal)
+            while (currentInterval.Size > _stopSignal)
             {
                 Thread.Sleep(_threadPauseSize);
 
-                // Возможно необходим рефакторинг
+                // Преобразование интервала. Вычисление новой точки испытания
+                CalculateAndAddNewPoint(currentInterval, position);   
 
-                var intervalForMath = _intervals.First(it => Equals(it.Size, tmpValue));
-                var position = _intervals.FindIndex(new System.Predicate<Interval>(
-                    it=>it.Size == intervalForMath.Size &&
-                    it.StartValue == intervalForMath.StartValue &&
-                    it.XCoordValue == intervalForMath.XCoordValue));
-
-                var newCoord = (_intervals.ElementAt(position + 1).XCoordValue + intervalForMath.XCoordValue)/2;
-
-                var newInterval = new Interval(
-                    _functionInfo.GetValueByXCoord(newCoord), newCoord, _intervals.ElementAt(position + 1).XCoordValue - newCoord);
-
-                _intervals.ElementAt(position).Size = newCoord - intervalForMath.XCoordValue;
-
-                DrawNewPoint(newInterval.XCoordValue, newInterval.StartValue);
-
-                _intervals.Insert(position + 1, newInterval);
-
-                // Условие останова
-                tmpValue = _intervals.Max(it => it.Size);
+                // Поиск следующего интервала для преобразования и проверка условия останова
+                currentInterval = GetIntervalWithMaxCharacteristic(out position);
             }
+
             MaxValueY = _intervals.Max(it => it.StartValue);
             MinValueY = _intervals.Min(it => it.StartValue);
 
@@ -194,6 +166,80 @@ namespace Main_work.HelpClasses
         private void StartPolyline()
         {
 
+        }
+        
+        private Interval GetIntervalWithMaxCharacteristic(out int position)
+        {
+            Interval result = _intervals.First();
+            position = 0;
+            switch (_currentMathMethod)
+            {
+                case MethodType.ScanMethod:
+
+                    var maxParameterValue = _intervals.Max(it => it.Size);
+                    result = _intervals.First(it => Equals(it.Size, maxParameterValue));
+
+                    position = _intervals.FindIndex(new System.Predicate<Interval>(
+                    it => it.Size == result.Size &&
+                    it.StartValue == result.StartValue &&
+                    it.XCoordValue == result.XCoordValue));
+
+                    break;
+
+                case MethodType.InfoStatisticAlgoritm:
+                    
+                    break;
+
+                case MethodType.Polyline:
+                    
+                    break;
+
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+        private void CalculateAndAddNewPoint(Interval interval, int position)
+        {
+            Interval result = _intervals.First();
+            var newCoord = 0.0;
+            Interval newInterval = null;
+            switch (_currentMathMethod)
+            {
+                case MethodType.ScanMethod:
+                    {
+                        // Находим координату нового испытания
+                        newCoord = interval.XCoordValue + interval.Size / 2;
+                        newInterval = new Interval(
+                            _functionInfo.GetValueByXCoord(newCoord), newCoord, _intervals.ElementAt(position + 1).XCoordValue - newCoord);
+
+                        // Меняем характеристику предыдущего интервала
+                        _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
+                        break;
+                    }
+
+                case MethodType.InfoStatisticAlgoritm:
+                    {
+
+                        break;
+                    }
+
+                case MethodType.Polyline:
+                    {
+
+                        break;
+                    }
+
+                default:
+                    break;
+            }
+
+            // Рисуем новую точку
+            DrawNewPoint(newInterval.XCoordValue, newInterval.StartValue);
+            // Добавляем очередное испытание
+            _intervals.Insert(position + 1, newInterval);
         }
 
         private void DrawNewPoint(double x, double y)
