@@ -14,8 +14,11 @@ namespace Main_work.HelpClasses
 
         private double _xMin, _xMax;
         private double _stopSignal;
+        private double _rParameter;
         private int _threadPauseSize;
         private List<Interval> _intervals;
+
+        private double _currentMParameter;
 
         public MinimumSearchMethodExecutor(FunctionInformation fInfo, MinimumSearchForm form)
         {
@@ -39,15 +42,16 @@ namespace Main_work.HelpClasses
             _currentMathMethod = newMathMethod;
         }
 
-        public bool StartMinimumSearch(string xMin, string xMax, string stopSignal, string stopTimer)
+        public bool StartMinimumSearch(string xMin, string xMax, string stopSignal, string stopTimer, string rParameter)
         {
             double xMi = 0, xMa = 0;
             double ss = 0;
-            int psc = 0;
+            double rPar = 0;
             bool flag = true;
             flag = double.TryParse(xMin, out xMi) &&
                 double.TryParse(xMax, out xMa) &&
-                double.TryParse(stopSignal, out ss);
+                double.TryParse(stopSignal, out ss) &&
+                double.TryParse(rParameter, out rPar);
 
             if (!flag)
                 return false;
@@ -59,7 +63,7 @@ namespace Main_work.HelpClasses
             _xMin = xMi;
             _xMax = xMa;
             _stopSignal = ss;
-            
+            _rParameter = rPar;
 
             SetMinMax();
             
@@ -94,6 +98,12 @@ namespace Main_work.HelpClasses
                     break;
             }
 
+            MaxValueY = _intervals.Max(it => it.StartValue) + 1;
+            MinValueY = _intervals.Min(it => it.StartValue) - 1;
+
+            DrawFullPointsAgain();
+            SetFindedMinimum();
+
             return true;
         }
 
@@ -107,17 +117,19 @@ namespace Main_work.HelpClasses
         /// отрисовать все точки заново
         /// </summary>
         public void DrawFullPointsAgain()
-        {
-
+        {            
+            _myForm.ClearDrawField();
+            foreach (var inter in _intervals)
+                DrawNewPoint(inter.XCoordValue, inter.StartValue);
         }
 
         private void SetMinMax()
         {
-            var tmp = Math.Max(_functionInfo.GetValueByXCoord(_xMin), _functionInfo.GetValueByXCoord(_xMin));
-            MaxValueY = (MaxValueY > tmp + 10.0) ? MaxValueY : tmp + 10.0;
+            var tmp = Math.Max(_functionInfo.GetValueByXCoord(MaxValueX), _functionInfo.GetValueByXCoord(MinValueX));
+            MaxValueY = (MaxValueY > tmp) ? MaxValueY + 2.5 : tmp + 2.5;
             
-            tmp = Math.Min(_functionInfo.GetValueByXCoord(_xMin), _functionInfo.GetValueByXCoord(_xMin));
-            MinValueY = (MinValueY < tmp - 10.0) ? MinValueY : tmp - 10.0;
+            tmp = Math.Min(_functionInfo.GetValueByXCoord(MaxValueX), _functionInfo.GetValueByXCoord(MinValueX));
+            MinValueY = (MinValueY < tmp) ? MinValueY - 2.5 : tmp - 2.5;
         }
 
         /// <summary>
@@ -132,6 +144,8 @@ namespace Main_work.HelpClasses
 
             DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
             DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
+            
+            _intervals[0].Characteristic = _intervals[0].Size;
 
             var currentInterval = _intervals.First();
 
@@ -146,10 +160,6 @@ namespace Main_work.HelpClasses
                 currentInterval = GetIntervalWithMaxCharacteristic(out position);
             }
 
-            MaxValueY = _intervals.Max(it => it.StartValue);
-            MinValueY = _intervals.Min(it => it.StartValue);
-
-            SetFindedMinimum(_intervals.Min(it => it.StartValue));
         }
 
         /// <summary>
@@ -157,6 +167,28 @@ namespace Main_work.HelpClasses
         /// </summary>
         private void StartInfoStatisticAlgoritm()
         {
+            int position = 0;
+
+            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMin), _xMin, _xMax - _xMin));
+            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMax), _xMax, 0.0));
+
+            _intervals[0].Potential = Math.Abs( (_intervals[1].StartValue - _intervals[0].StartValue) / (_intervals[1].XCoordValue - _intervals[0].XCoordValue) );
+
+            DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
+            DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
+            
+            var currentInterval = GetIntervalWithMaxCharacteristic(out position);
+
+            while (currentInterval.Size > _stopSignal)
+            {
+                Thread.Sleep(_threadPauseSize);
+
+                // Преобразование интервала. Вычисление новой точки испытания
+                CalculateAndAddNewPoint(currentInterval, position);
+
+                // Поиск следующего интервала для преобразования и проверка условия останова
+                currentInterval = GetIntervalWithMaxCharacteristic(out position);
+            }
 
         }
 
@@ -165,45 +197,90 @@ namespace Main_work.HelpClasses
         /// </summary>
         private void StartPolyline()
         {
+            int position = 0;
+
+            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMin), _xMin, _xMax - _xMin));
+            _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMax), _xMax, 0.0));
+
+            _intervals[0].Potential = Math.Abs((_intervals[1].StartValue - _intervals[0].StartValue) / (_intervals[1].XCoordValue - _intervals[0].XCoordValue));
+
+            DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
+            DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
+
+            var currentInterval = _intervals.First();
+
+            while (currentInterval.Size > _stopSignal)
+            {
+                Thread.Sleep(_threadPauseSize);
+
+                // Преобразование интервала. Вычисление новой точки испытания
+                CalculateAndAddNewPoint(currentInterval, position);
+
+                // Поиск следующего интервала для преобразования и проверка условия останова
+                currentInterval = GetIntervalWithMaxCharacteristic(out position);
+            }
 
         }
         
         private Interval GetIntervalWithMaxCharacteristic(out int position)
         {
+            var MaxPotential = (_currentMathMethod == MethodType.InfoStatisticAlgoritm || _currentMathMethod == MethodType.Polyline) ?
+                _intervals.Max(it => it.Potential) : 0.0;
+            _currentMParameter = (_currentMathMethod == MethodType.ScanMethod) ? 0.0 :
+                (MaxPotential > 0) ? _rParameter * MaxPotential : 1.0;
+
             Interval result = _intervals.First();
             position = 0;
             switch (_currentMathMethod)
             {
-                case MethodType.ScanMethod:
-
-                    var maxParameterValue = _intervals.Max(it => it.Size);
-                    result = _intervals.First(it => Equals(it.Size, maxParameterValue));
-
-                    position = _intervals.FindIndex(new System.Predicate<Interval>(
-                    it => it.Size == result.Size &&
-                    it.StartValue == result.StartValue &&
-                    it.XCoordValue == result.XCoordValue));
-
+                case MethodType.ScanMethod:                    
                     break;
 
                 case MethodType.InfoStatisticAlgoritm:
-                    
-                    break;
-
+                    {
+                        var tmpCount = _intervals.Count - 1;
+                        for (int i = 0; i < tmpCount; i++)
+                        {
+                            var nextInterval = _intervals[i + 1];
+                            var currentInterval = _intervals[i];
+                            var tmpValue = _currentMParameter * (currentInterval.Size);
+                            _intervals[i].Characteristic = tmpValue +
+                                Math.Pow((nextInterval.StartValue - currentInterval.StartValue), 2) / tmpValue -
+                                2 * (nextInterval.StartValue + currentInterval.StartValue);
+                        }
+                        break;
+                    }
                 case MethodType.Polyline:
-                    
-                    break;
-
+                    {
+                        var tmpCount = _intervals.Count - 1;
+                        for (int i = 0; i < tmpCount; i++)
+                        {
+                            var nextInterval = _intervals[i + 1];
+                            var currentInterval = _intervals[i];
+                            _intervals[i].Characteristic = 0.5 * _currentMParameter * (nextInterval.XCoordValue - currentInterval.XCoordValue) -
+                                (nextInterval.StartValue + currentInterval.StartValue) / 2;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
+
+            var maxCharacteristicsValue = _intervals.Max(it => it.Characteristic);
+            result = _intervals.First(it => Equals(it.Characteristic, maxCharacteristicsValue));
+
+            position = _intervals.FindIndex(new System.Predicate<Interval>(
+            it => it.Size == result.Size &&
+            it.StartValue == result.StartValue &&
+            it.XCoordValue == result.XCoordValue));
 
             return result;
         }
 
         private void CalculateAndAddNewPoint(Interval interval, int position)
         {
-            Interval result = _intervals.First();
+            Interval result = _intervals.First();               
+
             var newCoord = 0.0;
             Interval newInterval = null;
             switch (_currentMathMethod)
@@ -212,26 +289,29 @@ namespace Main_work.HelpClasses
                     {
                         // Находим координату нового испытания
                         newCoord = interval.XCoordValue + interval.Size / 2;
+                        var tmpSize = _intervals.ElementAt(position + 1).XCoordValue - newCoord;
                         newInterval = new Interval(
-                            _functionInfo.GetValueByXCoord(newCoord), newCoord, _intervals.ElementAt(position + 1).XCoordValue - newCoord);
+                            _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
 
                         // Меняем характеристику предыдущего интервала
+                        _intervals.ElementAt(position).Characteristic = newCoord - interval.XCoordValue;
                         _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
                         break;
                     }
 
                 case MethodType.InfoStatisticAlgoritm:
-                    {
-
-                        break;
-                    }
-
                 case MethodType.Polyline:
                     {
+                        newCoord = 0.5 * (_intervals[position + 1].XCoordValue + interval.XCoordValue) - (_intervals[position + 1].StartValue - interval.StartValue) / ( 2 * _currentMParameter);
+
+                        var tmpSize = _intervals.ElementAt(position + 1).XCoordValue - newCoord;
+                        newInterval = new Interval(
+                            _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
+
+                        _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
 
                         break;
                     }
-
                 default:
                     break;
             }
@@ -247,9 +327,11 @@ namespace Main_work.HelpClasses
             _myForm.DrawPoint(x, y);
         }
 
-        private void SetFindedMinimum(double minimum)
+        private void SetFindedMinimum()
         {
-            _myForm.SetFindedMinimum(minimum);
+            double minimum = _intervals.Min(it => it.StartValue);
+            var minimumValue = _intervals.First(it=>it.StartValue == minimum);
+            _myForm.SetFindedMinimum(minimumValue.StartValue, minimumValue.XCoordValue);
         }
 
     }

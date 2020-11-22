@@ -58,6 +58,8 @@
             this.TimeToPauseValue = new System.Windows.Forms.TextBox();
             this.SearchResultLabel = new System.Windows.Forms.Label();
             this.SearchResultValue = new System.Windows.Forms.TextBox();
+            this.RParameterLabel = new System.Windows.Forms.Label();
+            this.RParameterValue = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.DrawField)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,28 +137,28 @@
             // 
             // FSin_value
             // 
-            this.FSin_value.Location = new System.Drawing.Point(1228, 132);
+            this.FSin_value.Location = new System.Drawing.Point(1229, 158);
             this.FSin_value.Name = "FSin_value";
             this.FSin_value.Size = new System.Drawing.Size(100, 20);
             this.FSin_value.TabIndex = 7;
             // 
             // SSin_value
             // 
-            this.SSin_value.Location = new System.Drawing.Point(1362, 132);
+            this.SSin_value.Location = new System.Drawing.Point(1363, 158);
             this.SSin_value.Name = "SSin_value";
             this.SSin_value.Size = new System.Drawing.Size(100, 20);
             this.SSin_value.TabIndex = 8;
             // 
             // SCos_value
             // 
-            this.SCos_value.Location = new System.Drawing.Point(1362, 158);
+            this.SCos_value.Location = new System.Drawing.Point(1363, 184);
             this.SCos_value.Name = "SCos_value";
             this.SCos_value.Size = new System.Drawing.Size(100, 20);
             this.SCos_value.TabIndex = 10;
             // 
             // FCos_value
             // 
-            this.FCos_value.Location = new System.Drawing.Point(1228, 158);
+            this.FCos_value.Location = new System.Drawing.Point(1229, 184);
             this.FCos_value.Name = "FCos_value";
             this.FCos_value.Size = new System.Drawing.Size(100, 20);
             this.FCos_value.TabIndex = 9;
@@ -164,7 +166,7 @@
             // FSin_parameter
             // 
             this.FSin_parameter.AutoSize = true;
-            this.FSin_parameter.Location = new System.Drawing.Point(1199, 135);
+            this.FSin_parameter.Location = new System.Drawing.Point(1200, 161);
             this.FSin_parameter.Name = "FSin_parameter";
             this.FSin_parameter.Size = new System.Drawing.Size(23, 13);
             this.FSin_parameter.TabIndex = 11;
@@ -173,7 +175,7 @@
             // SSin_parameter
             // 
             this.SSin_parameter.AutoSize = true;
-            this.SSin_parameter.Location = new System.Drawing.Point(1334, 135);
+            this.SSin_parameter.Location = new System.Drawing.Point(1335, 161);
             this.SSin_parameter.Name = "SSin_parameter";
             this.SSin_parameter.Size = new System.Drawing.Size(22, 13);
             this.SSin_parameter.TabIndex = 12;
@@ -182,7 +184,7 @@
             // SCos_parameter
             // 
             this.SCos_parameter.AutoSize = true;
-            this.SCos_parameter.Location = new System.Drawing.Point(1334, 161);
+            this.SCos_parameter.Location = new System.Drawing.Point(1335, 187);
             this.SCos_parameter.Name = "SCos_parameter";
             this.SCos_parameter.Size = new System.Drawing.Size(22, 13);
             this.SCos_parameter.TabIndex = 14;
@@ -191,7 +193,7 @@
             // FCos_parameter
             // 
             this.FCos_parameter.AutoSize = true;
-            this.FCos_parameter.Location = new System.Drawing.Point(1199, 161);
+            this.FCos_parameter.Location = new System.Drawing.Point(1200, 187);
             this.FCos_parameter.Name = "FCos_parameter";
             this.FCos_parameter.Size = new System.Drawing.Size(23, 13);
             this.FCos_parameter.TabIndex = 13;
@@ -200,7 +202,7 @@
             // EnterParametersLabel
             // 
             this.EnterParametersLabel.AutoSize = true;
-            this.EnterParametersLabel.Location = new System.Drawing.Point(1225, 105);
+            this.EnterParametersLabel.Location = new System.Drawing.Point(1226, 131);
             this.EnterParametersLabel.Name = "EnterParametersLabel";
             this.EnterParametersLabel.Size = new System.Drawing.Size(228, 13);
             this.EnterParametersLabel.TabIndex = 15;
@@ -210,7 +212,7 @@
             // 
             this.Save_is_correct_label.AutoSize = true;
             this.Save_is_correct_label.ForeColor = System.Drawing.Color.LimeGreen;
-            this.Save_is_correct_label.Location = new System.Drawing.Point(1244, 181);
+            this.Save_is_correct_label.Location = new System.Drawing.Point(1245, 207);
             this.Save_is_correct_label.Name = "Save_is_correct_label";
             this.Save_is_correct_label.Size = new System.Drawing.Size(170, 13);
             this.Save_is_correct_label.TabIndex = 16;
@@ -220,7 +222,7 @@
             // 
             this.Save_is_not_correct_label.AutoSize = true;
             this.Save_is_not_correct_label.ForeColor = System.Drawing.Color.Red;
-            this.Save_is_not_correct_label.Location = new System.Drawing.Point(1214, 181);
+            this.Save_is_not_correct_label.Location = new System.Drawing.Point(1214, 207);
             this.Save_is_not_correct_label.Name = "Save_is_not_correct_label";
             this.Save_is_not_correct_label.Size = new System.Drawing.Size(240, 13);
             this.Save_is_not_correct_label.TabIndex = 17;
@@ -228,7 +230,7 @@
             // 
             // ApplyNewParameter_Button
             // 
-            this.ApplyNewParameter_Button.Location = new System.Drawing.Point(1202, 197);
+            this.ApplyNewParameter_Button.Location = new System.Drawing.Point(1203, 223);
             this.ApplyNewParameter_Button.Name = "ApplyNewParameter_Button";
             this.ApplyNewParameter_Button.Size = new System.Drawing.Size(260, 23);
             this.ApplyNewParameter_Button.TabIndex = 18;
@@ -239,7 +241,7 @@
             // minimumXLabel
             // 
             this.minimumXLabel.AutoSize = true;
-            this.minimumXLabel.Location = new System.Drawing.Point(1199, 235);
+            this.minimumXLabel.Location = new System.Drawing.Point(1200, 261);
             this.minimumXLabel.Name = "minimumXLabel";
             this.minimumXLabel.Size = new System.Drawing.Size(69, 13);
             this.minimumXLabel.TabIndex = 19;
@@ -248,7 +250,7 @@
             // maximumXLabel
             // 
             this.maximumXLabel.AutoSize = true;
-            this.maximumXLabel.Location = new System.Drawing.Point(1334, 235);
+            this.maximumXLabel.Location = new System.Drawing.Point(1335, 261);
             this.maximumXLabel.Name = "maximumXLabel";
             this.maximumXLabel.Size = new System.Drawing.Size(72, 13);
             this.maximumXLabel.TabIndex = 20;
@@ -256,7 +258,7 @@
             // 
             // MinValueX
             // 
-            this.MinValueX.Location = new System.Drawing.Point(1265, 232);
+            this.MinValueX.Location = new System.Drawing.Point(1266, 258);
             this.MinValueX.Name = "MinValueX";
             this.MinValueX.Size = new System.Drawing.Size(63, 20);
             this.MinValueX.TabIndex = 21;
@@ -264,7 +266,7 @@
             // 
             // MaxValueX
             // 
-            this.MaxValueX.Location = new System.Drawing.Point(1399, 232);
+            this.MaxValueX.Location = new System.Drawing.Point(1400, 258);
             this.MaxValueX.Name = "MaxValueX";
             this.MaxValueX.Size = new System.Drawing.Size(63, 20);
             this.MaxValueX.TabIndex = 22;
@@ -273,7 +275,7 @@
             // StopLabel
             // 
             this.StopLabel.AutoSize = true;
-            this.StopLabel.Location = new System.Drawing.Point(1199, 261);
+            this.StopLabel.Location = new System.Drawing.Point(1200, 287);
             this.StopLabel.Name = "StopLabel";
             this.StopLabel.Size = new System.Drawing.Size(104, 13);
             this.StopLabel.TabIndex = 25;
@@ -281,7 +283,7 @@
             // 
             // MaxSectionDistance
             // 
-            this.MaxSectionDistance.Location = new System.Drawing.Point(1399, 258);
+            this.MaxSectionDistance.Location = new System.Drawing.Point(1400, 284);
             this.MaxSectionDistance.Name = "MaxSectionDistance";
             this.MaxSectionDistance.Size = new System.Drawing.Size(63, 20);
             this.MaxSectionDistance.TabIndex = 27;
@@ -289,7 +291,7 @@
             // 
             // StartSerchButton
             // 
-            this.StartSerchButton.Location = new System.Drawing.Point(1202, 310);
+            this.StartSerchButton.Location = new System.Drawing.Point(1203, 336);
             this.StartSerchButton.Name = "StartSerchButton";
             this.StartSerchButton.Size = new System.Drawing.Size(260, 23);
             this.StartSerchButton.TabIndex = 28;
@@ -300,7 +302,7 @@
             // TimeToPauseLabel
             // 
             this.TimeToPauseLabel.AutoSize = true;
-            this.TimeToPauseLabel.Location = new System.Drawing.Point(1199, 287);
+            this.TimeToPauseLabel.Location = new System.Drawing.Point(1200, 313);
             this.TimeToPauseLabel.Name = "TimeToPauseLabel";
             this.TimeToPauseLabel.Size = new System.Drawing.Size(161, 13);
             this.TimeToPauseLabel.TabIndex = 29;
@@ -308,7 +310,7 @@
             // 
             // TimeToPauseValue
             // 
-            this.TimeToPauseValue.Location = new System.Drawing.Point(1399, 284);
+            this.TimeToPauseValue.Location = new System.Drawing.Point(1400, 310);
             this.TimeToPauseValue.Name = "TimeToPauseValue";
             this.TimeToPauseValue.Size = new System.Drawing.Size(63, 20);
             this.TimeToPauseValue.TabIndex = 30;
@@ -317,7 +319,7 @@
             // SearchResultLabel
             // 
             this.SearchResultLabel.AutoSize = true;
-            this.SearchResultLabel.Location = new System.Drawing.Point(1199, 345);
+            this.SearchResultLabel.Location = new System.Drawing.Point(1200, 371);
             this.SearchResultLabel.Name = "SearchResultLabel";
             this.SearchResultLabel.Size = new System.Drawing.Size(118, 13);
             this.SearchResultLabel.TabIndex = 31;
@@ -325,17 +327,36 @@
             // 
             // SearchResultValue
             // 
-            this.SearchResultValue.Location = new System.Drawing.Point(1353, 342);
+            this.SearchResultValue.Location = new System.Drawing.Point(1354, 368);
             this.SearchResultValue.Name = "SearchResultValue";
             this.SearchResultValue.ReadOnly = true;
             this.SearchResultValue.Size = new System.Drawing.Size(109, 20);
             this.SearchResultValue.TabIndex = 32;
+            // 
+            // RParameterLabel
+            // 
+            this.RParameterLabel.AutoSize = true;
+            this.RParameterLabel.Location = new System.Drawing.Point(1190, 103);
+            this.RParameterLabel.Name = "RParameterLabel";
+            this.RParameterLabel.Size = new System.Drawing.Size(104, 13);
+            this.RParameterLabel.TabIndex = 33;
+            this.RParameterLabel.Text = "Введите параметр ";
+            // 
+            // RParameterValue
+            // 
+            this.RParameterValue.Location = new System.Drawing.Point(1300, 100);
+            this.RParameterValue.Name = "RParameterValue";
+            this.RParameterValue.Size = new System.Drawing.Size(107, 20);
+            this.RParameterValue.TabIndex = 34;
+            this.RParameterValue.Text = "0,1";
             // 
             // MinimumSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1474, 796);
+            this.Controls.Add(this.RParameterValue);
+            this.Controls.Add(this.RParameterLabel);
             this.Controls.Add(this.SearchResultValue);
             this.Controls.Add(this.SearchResultLabel);
             this.Controls.Add(this.TimeToPauseValue);
@@ -406,6 +427,8 @@
         private System.Windows.Forms.TextBox TimeToPauseValue;
         private System.Windows.Forms.Label SearchResultLabel;
         private System.Windows.Forms.TextBox SearchResultValue;
+        private System.Windows.Forms.Label RParameterLabel;
+        private System.Windows.Forms.TextBox RParameterValue;
     }
 }
 

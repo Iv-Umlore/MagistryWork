@@ -8,11 +8,13 @@ namespace Main_work.HelpClasses
 {
     public class Interval
     {
-        public Interval(double valueStart, double xCoord, double intervalSize = 0)
+        public Interval(double valueStart, double xCoord, double size = 0, double potential = 0)
         {
             StartValue = valueStart;
             XCoordValue = xCoord;
-            Size = intervalSize;
+            Size = size;
+            Potential = potential;
+            Characteristic = size;
         }
 
         public double StartValue {get; set; }
@@ -20,5 +22,9 @@ namespace Main_work.HelpClasses
         public double XCoordValue { get; set; }
 
         public double Size { get; set; }
+
+        public double Characteristic { get; set; }
+
+        public double Potential { get; set; }
     }
 }
