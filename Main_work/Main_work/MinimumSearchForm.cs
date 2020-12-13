@@ -168,7 +168,7 @@ namespace Main_work
             {
                 GetCorrectPixelForDraw(iterator, 0.0, out pixX, out pixY);
                 g.DrawLine(new Pen(Brushes.Red, 2),
-                    new Point(pixX, GetCorrectYCoord(pixY + 2)),
+                    new Point(pixX, GetCorrectYCoord(pixY + 4)),
                     new Point(pixX, GetCorrectYCoord(pixY - 2)));
                 g.DrawString(iterator.ToString(),
                     new Font(this.Font, FontStyle.Italic),
@@ -178,6 +178,9 @@ namespace Main_work
                 iterator = Math.Round(iterator, 2);
             }
             #endregion
+
+            // Сама Функция
+            _minExecutor.DrawFunction(_minExecutor.MinValueX, _minExecutor.MaxValueX, Brushes.Pink);
         }
 
         void GetCorrectPixelForDraw(double valueX, double valueY, out int X, out int Y)
@@ -194,17 +197,22 @@ namespace Main_work
         public void DrawPoint(double XCoord, double YCoord)
         {
             int xPixel, yPixel;
-            GetCorrectPixelForDraw(XCoord, YCoord, out xPixel,out yPixel);
+            GetCorrectPixelForDraw(XCoord, YCoord, out xPixel, out yPixel);
 
             Graphics g = DrawField.CreateGraphics();
-            g.DrawLine(new Pen(Brushes.Red, 1),
-                new Point(xPixel + 1, GetCorrectYCoord(yPixel - 1)),
-                new Point(xPixel - 1, GetCorrectYCoord(yPixel + 1)));
-
-            g.DrawLine(new Pen(Brushes.Red, 1),
-                new Point(xPixel - 1, GetCorrectYCoord(yPixel - 1)),
-                new Point(xPixel + 1, GetCorrectYCoord(yPixel + 1)));   
+            g.DrawLine(new Pen(Brushes.Gold, 1),
+                new Point(xPixel, GetCorrectYCoord(_pixelYCoordZero - 2)),
+                new Point(xPixel, GetCorrectYCoord(_pixelYCoordZero + 2)));  
         } 
+
+        public void DrawSinglePoint(double XCoord, double YCoord, Brush color)
+        {
+            int xPixel, yPixel;
+            GetCorrectPixelForDraw(XCoord, YCoord, out xPixel, out yPixel);
+
+            Graphics g = DrawField.CreateGraphics();
+            g.FillRectangle(color, xPixel, GetCorrectYCoord(yPixel), 1, 1);
+        }
 
         public void SetFindedMinimum(double minimum, double xCoord)
         {

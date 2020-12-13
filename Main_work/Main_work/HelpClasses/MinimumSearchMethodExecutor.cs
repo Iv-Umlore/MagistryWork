@@ -32,6 +32,15 @@ namespace Main_work.HelpClasses
             _intervals = new List<Interval>();
         }
 
+        public void DrawFunction(double xMin, double xMax, System.Drawing.Brush color, double interval = 0.002)
+        {
+            while (xMin <= xMax)
+            {
+                DrawSinglePoint(xMin, _functionInfo.GetValueByXCoord(xMin), color);
+                xMin += interval;
+            }
+        }
+
         public bool SetFunctionValue(string sinFirst, string sinSecond, string cosFirst, string cosSecond)
         {
             return _functionInfo.SetPrivateParameter(sinFirst, sinSecond, cosFirst, cosSecond);
@@ -177,14 +186,20 @@ namespace Main_work.HelpClasses
             DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
             DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
             
+            // Установка M-параметра
+            SetMParameter();
+
             var currentInterval = GetIntervalWithMaxCharacteristic(out position);
 
             while (currentInterval.Size > _stopSignal)
             {
                 Thread.Sleep(_threadPauseSize);
-
+                
                 // Преобразование интервала. Вычисление новой точки испытания
                 CalculateAndAddNewPoint(currentInterval, position);
+                
+                // Установка M-параметра
+                SetMParameter();
 
                 // Поиск следующего интервала для преобразования и проверка условия останова
                 currentInterval = GetIntervalWithMaxCharacteristic(out position);
@@ -206,9 +221,12 @@ namespace Main_work.HelpClasses
 
             DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
             DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
+            
+            // Установка M-параметра
+            SetMParameter();
 
-            var currentInterval = _intervals.First();
-
+            var currentInterval = GetIntervalWithMaxCharacteristic(out position);
+            
             while (currentInterval.Size > _stopSignal)
             {
                 Thread.Sleep(_threadPauseSize);
@@ -216,19 +234,25 @@ namespace Main_work.HelpClasses
                 // Преобразование интервала. Вычисление новой точки испытания
                 CalculateAndAddNewPoint(currentInterval, position);
 
+                // Установка M-параметра
+                SetMParameter();
+
                 // Поиск следующего интервала для преобразования и проверка условия останова
                 currentInterval = GetIntervalWithMaxCharacteristic(out position);
             }
 
         }
         
-        private Interval GetIntervalWithMaxCharacteristic(out int position)
+        private void SetMParameter()
         {
             var MaxPotential = (_currentMathMethod == MethodType.InfoStatisticAlgoritm || _currentMathMethod == MethodType.Polyline) ?
                 _intervals.Max(it => it.Potential) : 0.0;
             _currentMParameter = (_currentMathMethod == MethodType.ScanMethod) ? 0.0 :
-                (MaxPotential > 0) ? _rParameter * MaxPotential : 1.0;
+                (MaxPotential > 0 && _rParameter > 1) ? _rParameter * MaxPotential : 1.0;
+        }
 
+        private Interval GetIntervalWithMaxCharacteristic(out int position)
+        {
             Interval result = _intervals.First();
             position = 0;
             switch (_currentMathMethod)
@@ -320,6 +344,11 @@ namespace Main_work.HelpClasses
             DrawNewPoint(newInterval.XCoordValue, newInterval.StartValue);
             // Добавляем очередное испытание
             _intervals.Insert(position + 1, newInterval);
+        }
+
+        private void DrawSinglePoint(double x, double y, System.Drawing.Brush color)
+        {
+            _myForm.DrawSinglePoint(x, y, color);
         }
 
         private void DrawNewPoint(double x, double y)
