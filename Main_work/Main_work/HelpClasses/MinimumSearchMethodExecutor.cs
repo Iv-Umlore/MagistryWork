@@ -181,7 +181,7 @@ namespace Main_work.HelpClasses
             _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMin), _xMin, _xMax - _xMin));
             _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMax), _xMax, 0.0));
 
-            _intervals[0].Potential = Math.Abs( (_intervals[1].StartValue - _intervals[0].StartValue) / (_intervals[1].XCoordValue - _intervals[0].XCoordValue) );
+            _intervals[0].CalculatePotential(_intervals[1].StartValue, _intervals[1].XCoordValue);
 
             DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
             DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
@@ -217,7 +217,8 @@ namespace Main_work.HelpClasses
             _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMin), _xMin, _xMax - _xMin));
             _intervals.Add(new Interval(_functionInfo.GetValueByXCoord(_xMax), _xMax, 0.0));
 
-            _intervals[0].Potential = Math.Abs((_intervals[1].StartValue - _intervals[0].StartValue) / (_intervals[1].XCoordValue - _intervals[0].XCoordValue));
+            _intervals[0].CalculatePotential(_intervals[1].StartValue, _intervals[1].XCoordValue);
+                
 
             DrawNewPoint(_intervals.First().XCoordValue, _intervals.First().StartValue);
             DrawNewPoint(_intervals.Last().XCoordValue, _intervals.Last().StartValue);
@@ -241,14 +242,6 @@ namespace Main_work.HelpClasses
                 currentInterval = GetIntervalWithMaxCharacteristic(out position);
             }
 
-        }
-        
-        private void SetMParameter()
-        {
-            var MaxPotential = (_currentMathMethod == MethodType.InfoStatisticAlgoritm || _currentMathMethod == MethodType.Polyline) ?
-                _intervals.Max(it => it.Potential) : 0.0;
-            _currentMParameter = (_currentMathMethod == MethodType.ScanMethod) ? 0.0 :
-                (MaxPotential > 0 && _rParameter > 1) ? _rParameter * MaxPotential : 1.0;
         }
 
         private Interval GetIntervalWithMaxCharacteristic(out int position)
@@ -301,6 +294,26 @@ namespace Main_work.HelpClasses
             return result;
         }
 
+        #region Вспомогательные функции:
+
+        private double GetPotensial(double finishValue, double startValue, double finishCoord, double startCooord)
+        {
+            return Math.Abs((finishValue - startValue)) / (finishCoord - startCooord);
+        }
+
+        private void SetMParameter()
+        {
+            var MaxPotential = (_currentMathMethod == MethodType.InfoStatisticAlgoritm || _currentMathMethod == MethodType.Polyline) ?
+                _intervals.Max(it => it.Potential) : 0.0;
+            _currentMParameter = (_currentMathMethod == MethodType.ScanMethod) ? 0.0 :
+                (MaxPotential > 0 && _rParameter > 1) ? _rParameter * MaxPotential : 1.0;
+        }
+
+        #endregion
+
+
+        #region Взаимодействие и графикой:
+
         private void CalculateAndAddNewPoint(Interval interval, int position)
         {
             Interval result = _intervals.First();               
@@ -333,7 +346,6 @@ namespace Main_work.HelpClasses
                             _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
 
                         _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
-
                         break;
                     }
                 default:
@@ -344,6 +356,10 @@ namespace Main_work.HelpClasses
             DrawNewPoint(newInterval.XCoordValue, newInterval.StartValue);
             // Добавляем очередное испытание
             _intervals.Insert(position + 1, newInterval);
+
+            // Меняем потенциалы обоих интервалов
+            _intervals[position].CalculatePotential(newInterval.StartValue, newInterval.XCoordValue);
+            _intervals[position+1].CalculatePotential(_intervals[position + 2].StartValue, _intervals[position + 2].XCoordValue);
         }
 
         private void DrawSinglePoint(double x, double y, System.Drawing.Brush color)
@@ -363,5 +379,6 @@ namespace Main_work.HelpClasses
             _myForm.SetFindedMinimum(minimumValue.StartValue, minimumValue.XCoordValue);
         }
 
+        #endregion
     }
 }
