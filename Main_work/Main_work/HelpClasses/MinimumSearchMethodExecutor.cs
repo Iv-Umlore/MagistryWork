@@ -26,8 +26,8 @@ namespace Main_work.HelpClasses
             _myForm = form;
             _currentMathMethod = MethodType.ScanMethod;
             _thread = new Thread(StartScanMethodScan);
-            MaxValueY = 0;
-            MinValueY = 0;
+            MaxValueY = 5;
+            MinValueY = -5;
 
             _intervals = new List<Interval>();
         }
@@ -53,6 +53,7 @@ namespace Main_work.HelpClasses
 
         public bool StartMinimumSearch(string xMin, string xMax, string stopSignal, string stopTimer, string rParameter)
         {
+            IterationCount = 0;
             double xMi = 0, xMa = 0;
             double ss = 0;
             double rPar = 0;
@@ -67,7 +68,6 @@ namespace Main_work.HelpClasses
 
             if (!int.TryParse(stopTimer, out _threadPauseSize))
                 _threadPauseSize = 100;
-            
 
             _xMin = xMi;
             _xMax = xMa;
@@ -75,7 +75,7 @@ namespace Main_work.HelpClasses
             _rParameter = rPar;
 
             SetMinMax();
-            
+
             // Подготовка для новой итерации
             if (_thread.IsAlive)
                 _thread.Abort();
@@ -123,6 +123,11 @@ namespace Main_work.HelpClasses
         public double MaxValueX { get => _xMax; }
 
         /// <summary>
+        /// Счётчик количества циклов при поиске минимума
+        /// </summary>
+        public int IterationCount { get; private set; }
+
+        /// <summary>
         /// отрисовать все точки заново
         /// </summary>
         public void DrawFullPointsAgain()
@@ -132,11 +137,15 @@ namespace Main_work.HelpClasses
                 DrawNewPoint(inter.XCoordValue, inter.StartValue);
         }
 
+
+        /// <summary>
+        /// Установка начальных значений Min Max
+        /// </summary>
         private void SetMinMax()
         {
             var tmp = Math.Max(_functionInfo.GetValueByXCoord(MaxValueX), _functionInfo.GetValueByXCoord(MinValueX));
             MaxValueY = (MaxValueY > tmp) ? MaxValueY + 2.5 : tmp + 2.5;
-            
+
             tmp = Math.Min(_functionInfo.GetValueByXCoord(MaxValueX), _functionInfo.GetValueByXCoord(MinValueX));
             MinValueY = (MinValueY < tmp) ? MinValueY - 2.5 : tmp - 2.5;
         }
@@ -160,6 +169,7 @@ namespace Main_work.HelpClasses
 
             while (currentInterval.Size > _stopSignal)
             {
+                IterationCount++;
                 Thread.Sleep(_threadPauseSize);
 
                 // Преобразование интервала. Вычисление новой точки испытания
@@ -193,6 +203,7 @@ namespace Main_work.HelpClasses
 
             while (currentInterval.Size > _stopSignal)
             {
+                IterationCount++;
                 Thread.Sleep(_threadPauseSize);
                 
                 // Преобразование интервала. Вычисление новой точки испытания
@@ -230,6 +241,7 @@ namespace Main_work.HelpClasses
             
             while (currentInterval.Size > _stopSignal)
             {
+                IterationCount++;
                 Thread.Sleep(_threadPauseSize);
 
                 // Преобразование интервала. Вычисление новой точки испытания
@@ -330,6 +342,8 @@ namespace Main_work.HelpClasses
                         newInterval = new Interval(
                             _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
 
+                        CorrectMaxAndMin(newInterval.StartValue);
+
                         // Меняем характеристику предыдущего интервала
                         _intervals.ElementAt(position).Characteristic = newCoord - interval.XCoordValue;
                         _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
@@ -344,6 +358,8 @@ namespace Main_work.HelpClasses
                         var tmpSize = _intervals.ElementAt(position + 1).XCoordValue - newCoord;
                         newInterval = new Interval(
                             _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
+                        
+                        CorrectMaxAndMin(newInterval.StartValue);
 
                         _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
                         break;
@@ -360,6 +376,15 @@ namespace Main_work.HelpClasses
             // Меняем потенциалы обоих интервалов
             _intervals[position].CalculatePotential(newInterval.StartValue, newInterval.XCoordValue);
             _intervals[position+1].CalculatePotential(_intervals[position + 2].StartValue, _intervals[position + 2].XCoordValue);
+        }
+
+        private void CorrectMaxAndMin(double value)
+        {
+            if (value >= MaxValueY)
+                MaxValueY = value + 2.5;
+
+            if (value <= MinValueY)
+                MinValueY = value - 2.5;
         }
 
         private void DrawSinglePoint(double x, double y, System.Drawing.Brush color)

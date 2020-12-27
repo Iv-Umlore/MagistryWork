@@ -249,8 +249,9 @@ namespace Main_work
                 (flagX) ? _pixelXCoordZero + 12 : _pixelXCoordZero - 50, GetCorrectYCoord(minPixY - 4));
             
             SearchResultValue.Text = string.Format("{0:0.0000000}", minimum);
+            FindedXValue.Text = string.Format("{0:0.0000000}", xCoord);
+
+            IterationCountValue.Text = _minExecutor.IterationCount.ToString();
         }
-
-
     }
 }
