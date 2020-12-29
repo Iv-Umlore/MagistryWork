@@ -27,8 +27,8 @@ namespace Main_work.HelpClasses
             _myForm = form;
             _currentMathMethod = MethodType.ScanMethod;
             _thread = new Thread(StartScanMethodScan);
-            MaxValueY = 5;
-            MinValueY = -5;
+            MaxValueY = 1;
+            MinValueY = -1;
 
             _intervals = new List<Interval>();
         }
@@ -84,7 +84,7 @@ namespace Main_work.HelpClasses
             // Очищение массива
             _intervals.Clear();
             //очищение поля для рисования
-            _myForm.ClearDrawField();
+            _myForm.ClearDrawField(true);
 
 
             switch (_currentMathMethod)
@@ -281,7 +281,7 @@ namespace Main_work.HelpClasses
                     break;
             }
 
-            var maxCharacteristicsValue = _intervals.Max(it => it.Characteristic);
+            var maxCharacteristicsValue = _intervals.Take(_intervals.Count-1).Max(it => it.Characteristic);
             result = _intervals.First(it => Equals(it.Characteristic, maxCharacteristicsValue));
 
             position = _intervals.FindIndex(new System.Predicate<Interval>(
