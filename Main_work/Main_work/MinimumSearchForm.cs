@@ -87,7 +87,7 @@ namespace Main_work
             var isStarted = _minExecutor.StartMinimumSearch(MinValueX.Text, MaxValueX.Text, MaxSectionDistance.Text, TimeToPauseValue.Text, RParameterValue.Text);
         }
 
-        public void ClearDrawField()
+        public void ClearDrawField(bool isSecondCall = false)
         {
 
             double step = Math.Round((_minExecutor.MaxValueX - _minExecutor.MinValueX) / 20, 2);
@@ -167,8 +167,8 @@ namespace Main_work
             while (iterator <= _minExecutor.MaxValueX - step)
             {
                 GetCorrectPixelForDraw(iterator, 0.0, out pixX, out pixY);
-                g.DrawLine(new Pen(Brushes.Red, 2),
-                    new Point(pixX, GetCorrectYCoord(pixY + 4)),
+                g.DrawLine(new Pen(Brushes.Red, 3),
+                    new Point(pixX, GetCorrectYCoord(pixY + 10)),
                     new Point(pixX, GetCorrectYCoord(pixY - 2)));
                 g.DrawString(iterator.ToString(),
                     new Font(this.Font, FontStyle.Italic),
@@ -180,7 +180,7 @@ namespace Main_work
             #endregion
 
             // Сама Функция
-            _minExecutor.DrawFunction(_minExecutor.MinValueX, _minExecutor.MaxValueX, Brushes.Pink);
+            _minExecutor.DrawFunction(_minExecutor.MinValueX, _minExecutor.MaxValueX, isSecondCall, Brushes.Pink);
         }
 
         void GetCorrectPixelForDraw(double valueX, double valueY, out int X, out int Y)
@@ -200,9 +200,9 @@ namespace Main_work
             GetCorrectPixelForDraw(XCoord, YCoord, out xPixel, out yPixel);
 
             Graphics g = DrawField.CreateGraphics();
-            g.DrawLine(new Pen(Brushes.Gold, 1),
+            g.DrawLine(new Pen(Brushes.Gold, 2),
                 new Point(xPixel, GetCorrectYCoord(_pixelYCoordZero - 2)),
-                new Point(xPixel, GetCorrectYCoord(_pixelYCoordZero + 2)));  
+                new Point(xPixel, GetCorrectYCoord(_pixelYCoordZero + 3)));  
         } 
 
         public void DrawSinglePoint(double XCoord, double YCoord, Brush color)

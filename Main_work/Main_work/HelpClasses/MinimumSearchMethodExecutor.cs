@@ -13,6 +13,7 @@ namespace Main_work.HelpClasses
         private Thread _thread;
 
         private double _xMin, _xMax;
+        private double _yMin, _yMax;
         private double _stopSignal;
         private double _rParameter;
         private int _threadPauseSize;
@@ -32,11 +33,14 @@ namespace Main_work.HelpClasses
             _intervals = new List<Interval>();
         }
 
-        public void DrawFunction(double xMin, double xMax, System.Drawing.Brush color, double interval = 0.002)
+        public void DrawFunction(double xMin, double xMax, bool isCorrectMinMax, System.Drawing.Brush color, double interval = 0.002)
         {
             while (xMin <= xMax)
             {
-                DrawSinglePoint(xMin, _functionInfo.GetValueByXCoord(xMin), color);
+                var yValue = _functionInfo.GetValueByXCoord(xMin);
+                if (isCorrectMinMax)
+                    CorrectMaxAndMin(yValue);
+                DrawSinglePoint(xMin, yValue, color);
                 xMin += interval;
             }
         }
@@ -73,9 +77,7 @@ namespace Main_work.HelpClasses
             _xMax = xMa;
             _stopSignal = ss;
             _rParameter = rPar;
-
-            SetMinMax();
-
+            
             // Подготовка для новой итерации
             if (_thread.IsAlive)
                 _thread.Abort();
@@ -106,10 +108,7 @@ namespace Main_work.HelpClasses
                 default:
                     break;
             }
-
-            MaxValueY = _intervals.Max(it => it.StartValue) + 1;
-            MinValueY = _intervals.Min(it => it.StartValue) - 1;
-
+            
             DrawFullPointsAgain();
             SetFindedMinimum();
 
@@ -136,20 +135,7 @@ namespace Main_work.HelpClasses
             foreach (var inter in _intervals)
                 DrawNewPoint(inter.XCoordValue, inter.StartValue);
         }
-
-
-        /// <summary>
-        /// Установка начальных значений Min Max
-        /// </summary>
-        private void SetMinMax()
-        {
-            var tmp = Math.Max(_functionInfo.GetValueByXCoord(MaxValueX), _functionInfo.GetValueByXCoord(MinValueX));
-            MaxValueY = (MaxValueY > tmp) ? MaxValueY + 2.5 : tmp + 2.5;
-
-            tmp = Math.Min(_functionInfo.GetValueByXCoord(MaxValueX), _functionInfo.GetValueByXCoord(MinValueX));
-            MinValueY = (MinValueY < tmp) ? MinValueY - 2.5 : tmp - 2.5;
-        }
-
+        
         /// <summary>
         /// Метод сканирования
         /// </summary>
@@ -342,7 +328,7 @@ namespace Main_work.HelpClasses
                         newInterval = new Interval(
                             _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
 
-                        CorrectMaxAndMin(newInterval.StartValue);
+                        // CorrectMaxAndMin(newInterval.StartValue);
 
                         // Меняем характеристику предыдущего интервала
                         _intervals.ElementAt(position).Characteristic = newCoord - interval.XCoordValue;
@@ -359,7 +345,7 @@ namespace Main_work.HelpClasses
                         newInterval = new Interval(
                             _functionInfo.GetValueByXCoord(newCoord), newCoord, tmpSize);
                         
-                        CorrectMaxAndMin(newInterval.StartValue);
+                        // CorrectMaxAndMin(newInterval.StartValue);
 
                         _intervals.ElementAt(position).Size = newCoord - interval.XCoordValue;
                         break;
@@ -381,10 +367,10 @@ namespace Main_work.HelpClasses
         private void CorrectMaxAndMin(double value)
         {
             if (value >= MaxValueY)
-                MaxValueY = value + 2.5;
+                MaxValueY = value + 0.5;
 
             if (value <= MinValueY)
-                MinValueY = value - 2.5;
+                MinValueY = value - 0.5;
         }
 
         private void DrawSinglePoint(double x, double y, System.Drawing.Brush color)
