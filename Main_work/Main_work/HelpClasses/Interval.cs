@@ -26,5 +26,11 @@ namespace Main_work.HelpClasses
         public double Characteristic { get; set; }
 
         public double Potential { get; set; }
+
+        public void CalculatePotential(double finishValue, double finishCoord)
+        {
+            Potential = Math.Abs((finishValue - StartValue)) / (finishCoord - XCoordValue);
+        }
+
     }
 }

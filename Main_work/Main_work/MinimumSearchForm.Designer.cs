@@ -60,6 +60,10 @@
             this.SearchResultValue = new System.Windows.Forms.TextBox();
             this.RParameterLabel = new System.Windows.Forms.Label();
             this.RParameterValue = new System.Windows.Forms.TextBox();
+            this.FindedXValue = new System.Windows.Forms.TextBox();
+            this.FindedXLabel = new System.Windows.Forms.Label();
+            this.IterationCountValue = new System.Windows.Forms.TextBox();
+            this.IterationCountLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DrawField)).BeginInit();
             this.SuspendLayout();
             // 
@@ -348,13 +352,51 @@
             this.RParameterValue.Name = "RParameterValue";
             this.RParameterValue.Size = new System.Drawing.Size(107, 20);
             this.RParameterValue.TabIndex = 34;
-            this.RParameterValue.Text = "0,1";
+            this.RParameterValue.Text = "2,5";
+            // 
+            // FindedXValue
+            // 
+            this.FindedXValue.Location = new System.Drawing.Point(1354, 392);
+            this.FindedXValue.Name = "FindedXValue";
+            this.FindedXValue.ReadOnly = true;
+            this.FindedXValue.Size = new System.Drawing.Size(109, 20);
+            this.FindedXValue.TabIndex = 36;
+            // 
+            // FindedXLabel
+            // 
+            this.FindedXLabel.AutoSize = true;
+            this.FindedXLabel.Location = new System.Drawing.Point(1201, 395);
+            this.FindedXLabel.Name = "FindedXLabel";
+            this.FindedXLabel.Size = new System.Drawing.Size(112, 13);
+            this.FindedXLabel.TabIndex = 35;
+            this.FindedXLabel.Text = "Соответствующий Х:";
+            // 
+            // IterationCountValue
+            // 
+            this.IterationCountValue.Location = new System.Drawing.Point(1354, 418);
+            this.IterationCountValue.Name = "IterationCountValue";
+            this.IterationCountValue.ReadOnly = true;
+            this.IterationCountValue.Size = new System.Drawing.Size(109, 20);
+            this.IterationCountValue.TabIndex = 38;
+            // 
+            // IterationCountLabel
+            // 
+            this.IterationCountLabel.AutoSize = true;
+            this.IterationCountLabel.Location = new System.Drawing.Point(1201, 421);
+            this.IterationCountLabel.Name = "IterationCountLabel";
+            this.IterationCountLabel.Size = new System.Drawing.Size(149, 13);
+            this.IterationCountLabel.TabIndex = 37;
+            this.IterationCountLabel.Text = "Число итераций алгоритма:";
             // 
             // MinimumSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1474, 796);
+            this.Controls.Add(this.IterationCountValue);
+            this.Controls.Add(this.IterationCountLabel);
+            this.Controls.Add(this.FindedXValue);
+            this.Controls.Add(this.FindedXLabel);
             this.Controls.Add(this.RParameterValue);
             this.Controls.Add(this.RParameterLabel);
             this.Controls.Add(this.SearchResultValue);
@@ -429,6 +471,10 @@
         private System.Windows.Forms.TextBox SearchResultValue;
         private System.Windows.Forms.Label RParameterLabel;
         private System.Windows.Forms.TextBox RParameterValue;
+        private System.Windows.Forms.TextBox FindedXValue;
+        private System.Windows.Forms.Label FindedXLabel;
+        private System.Windows.Forms.TextBox IterationCountValue;
+        private System.Windows.Forms.Label IterationCountLabel;
     }
 }
 
