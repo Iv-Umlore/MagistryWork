@@ -125,8 +125,8 @@
       <DependentUpon>MinimumSearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HelpClasses\Enums.cs" />
-    <Compile Include="HelpClasses\FunctionInformation.cs" />
-    <Compile Include="HelpClasses\MinimumSearchMethodExecutor.cs" />
+    <Compile Include="Function\FunctionInformation.cs" />
+    <Compile Include="MinimumSearchMethodExecutors\MinimumSearchMethodExecutor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MinimumSearchForm.resx">
@@ -154,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parser\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

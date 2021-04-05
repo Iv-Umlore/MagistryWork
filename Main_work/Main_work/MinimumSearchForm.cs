@@ -3,6 +3,8 @@ using System;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using Main_work.MinimumSearchMethodExecutors;
+using Main_work.Function;
 
 namespace Main_work
 {
