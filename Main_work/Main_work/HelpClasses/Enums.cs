@@ -21,4 +21,16 @@ namespace Main_work.HelpClasses
         /// </summary>
         ScanMethod
     }
+
+    public enum Operation
+    {
+        Plus,
+        Minus,
+        Myltiplication,
+        Div,
+        Degree,
+        Sin,
+        Cos,
+        Unknown
+    }
 }
