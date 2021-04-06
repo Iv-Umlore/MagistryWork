@@ -8,12 +8,12 @@ namespace Main_work.HelpClasses
 {
     static public class Operations
     {
-        static List<string> GetOperations()
+        static public List<string> GetOperations()
         {
             return new List<string> { "+", "-", "*", "/", "^", "sin", "cos" };
         }
 
-        static Operation GetOperation(string operation)
+        static public Operation GetOperation(string operation)
         {
             switch (operation)
             {
@@ -34,6 +34,30 @@ namespace Main_work.HelpClasses
                 default:
                     return Operation.Unknown;
             }
+        }
+
+        static public string ConvertToString(Operation operation)
+        {
+            switch (operation)
+            {
+                case Operation.Plus:
+                    return "+";
+                case Operation.Minus:
+                    return "-";
+                case Operation.Myltiplication:
+                    return "*";
+                case Operation.Div:
+                    return "/";
+                case Operation.Degree:
+                    return "^";
+                case Operation.Sin:
+                    return "sin";
+                case Operation.Cos:
+                    return "cos";
+                default:
+                    return "";
+            }
+
         }
     }
 }

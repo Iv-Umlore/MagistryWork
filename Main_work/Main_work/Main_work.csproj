@@ -121,8 +121,10 @@
     <Compile Include="Function\FunctionInformation_V2.cs" />
     <Compile Include="Function\FunctionPart\SimplePart.cs" />
     <Compile Include="Function\FunctionPart\Term.cs" />
+    <Compile Include="HelpClasses\FunctionHelper\FunctionCreated.cs" />
     <Compile Include="HelpClasses\Interval.cs" />
-    <Compile Include="HelpClasses\Operations.cs" />
+    <Compile Include="HelpClasses\FunctionHelper\Operations.cs" />
+    <Compile Include="HelpClasses\FunctionHelper\ParseHelper.cs" />
     <Compile Include="MinimumSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
