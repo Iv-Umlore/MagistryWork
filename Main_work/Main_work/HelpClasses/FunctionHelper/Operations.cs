@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Main_work.HelpClasses
 {
@@ -59,5 +57,29 @@ namespace Main_work.HelpClasses
             }
 
         }
+
+        static public double GetNewValue(double lastValue, double changeValue, Operation op)
+        {
+            switch (op)
+            {
+                case Operation.Plus:
+                    return lastValue + changeValue;
+                case Operation.Minus:
+                    return lastValue - changeValue;
+                case Operation.Myltiplication:
+                    return lastValue * changeValue;
+                case Operation.Div:
+                    return lastValue / changeValue;
+                case Operation.Degree:
+                    return Math.Pow(lastValue, changeValue);
+                case Operation.Sin:
+                    return Math.Sin(changeValue);
+                case Operation.Cos:
+                    return Math.Cos(changeValue);
+                default:
+                    throw new Exception("Operations.GetNewValue(d,d,O): Неизвестная операция");
+            }
+        }
+
     }
 }

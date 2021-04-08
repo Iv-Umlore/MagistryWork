@@ -21,7 +21,7 @@ namespace Main_work.HelpClasses
 
             foreach (var t in tmp)
             {
-                if (term.Any(it => it == ')'))
+                if (t.Any(it => it == ')'))
                     myTerms.AddRange(GetBracketsTerms(t));
                 else
                     myTerms.Add(t);
@@ -77,8 +77,11 @@ namespace Main_work.HelpClasses
             List<string> result = new List<string>();
 
             //todo Terms: Проверить не попадает ли скобка в итоговые листы
-            result.Add(term.Substring(0, index - 1));
-            result.Add(term.Substring(index + 1));
+            result.Add(term.Substring(0, index));
+
+            var str = term.Substring(index + 1);
+            if (!string.IsNullOrEmpty(str))
+                result.Add(str);
 
             return result;
         }
@@ -86,7 +89,9 @@ namespace Main_work.HelpClasses
         private static string ClearFromSEOperations(string str, Operation Start, Operation End)
         {
             str = str.Substring(Operations.ConvertToString(Start).Length);
-            str = str.Substring(0, str.Length - Operations.ConvertToString(End).Length);
+
+            if (str.EndsWith(Operations.ConvertToString(End)))
+                str = str.Substring(0, str.Length - Operations.ConvertToString(End).Length);
 
             return str;
         }

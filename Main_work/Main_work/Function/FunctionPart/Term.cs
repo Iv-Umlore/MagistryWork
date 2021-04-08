@@ -47,14 +47,20 @@ namespace Main_work.Function.FunctionPart
 
         }
 
+        public void CanselFix(string variable)
+        {
+
+        }
+        
+        public double GetValue(Dictionary<string, double> variablesValue)
+        {
+            return 0.0;
+        }
+
         public double GetValue()
         {
             return 0.0;
         }
 
-        public void CanselFix(string variable)
-        {
-
-        }     
     }
 }
