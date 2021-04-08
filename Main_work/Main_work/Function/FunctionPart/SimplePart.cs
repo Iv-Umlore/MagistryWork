@@ -25,98 +25,63 @@ namespace Main_work.Function.FunctionPart
 
         public SimplePart(string str, Operation operation = Operation.Plus)
         {
+            str = str.Replace(" ", "");
             Part = str;
             IsFinal = true;
-
-            if (str.Contains("("))
             {
-                IsFinal = false;
-                List<string> parts = ParseHelper.GetTermsByBrackets(str);
+                if (str.Contains("("))
+                {
+                    IsFinal = false;
+                    List<string> parts = ParseHelper.GetTermsByBrackets(str);
 
-                var pInfo = ParseHelper.GetTermsInfo(parts);
+                    var pInfo = ParseHelper.GetTermsInfo(parts);
 
-                _parts = new List<SimplePart>();
-                foreach (var part in pInfo)
-                    _parts.Add(new SimplePart(part.termValue, part.operation));
-            }
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("+") && IsFinal)
-            {
-                IsFinal = false;
-                List<string> parts = str.Split('+').ToList();
+                    _parts = new List<SimplePart>();
+                    foreach (var part in pInfo)
+                        _parts.Add(new SimplePart(part.termValue, part.operation));
+                }
 
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Plus));
-            }
+                if (str.Contains("+") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Plus);
+                }
 
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("-") && IsFinal)
-            {
-                IsFinal = false;
-                string[] sep = new string[1];
-                sep[0] = "-";
-                List<string> parts = str.Split(sep, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (str.Contains("-") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Minus);
+                }
 
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Minus));
-            }
+                if (str.Contains("*") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Myltiplication);
+                }
 
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("*") && IsFinal)
-            {
-                IsFinal = false;
-                List<string> parts = str.Split('*').ToList();
+                if (str.Contains("/") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Div);
+                }
 
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Myltiplication));
-            }
+                if (str.Contains("sin") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Sin);
+                }
 
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("/") && IsFinal)
-            {
-                IsFinal = false;
-                List<string> parts = str.Split('/').ToList();
+                if (str.Contains("cos") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Cos);
+                }
 
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Div));
-            }
-
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("sin") && IsFinal)
-            {
-                IsFinal = false;
-                List<string> parts = str.Split(new string[] { "sin" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Sin));
-            }
-
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("cos") && IsFinal)
-            {
-                IsFinal = false;
-                List<string> parts = str.Split(new string[] { "cos" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Cos));
-            }
-
-
-            //todo SimplePart: Тесты на эту срань
-            if (str.Contains("^") && IsFinal)
-            {
-                IsFinal = false;
-                List<string> parts = str.Split('^').ToList();
-
-                _parts = new List<SimplePart>();
-                foreach (var part in parts)
-                    _parts.Add(new SimplePart(part, Operation.Degree));
+                if (str.Contains("^") && IsFinal)
+                {
+                    IsFinal = false;
+                    _parts = GetPartByOperations(str, Operation.Degree);
+                }
             }
             MyOperation = operation;
 
@@ -205,6 +170,85 @@ namespace Main_work.Function.FunctionPart
             }
 
             return result;
+        }
+
+        //todo SimplePart: Тесты на эту срань
+        private List<SimplePart> GetPartByOperations(string str, Operation operation)
+        {
+            var result = new List<SimplePart>();
+
+            switch (operation)
+            {
+                case Operation.Plus:
+                    {
+                        List<string> parts = str.Split('+').ToList();
+                        foreach (var part in parts)
+                            result.Add(new SimplePart(part, operation));
+                        break;
+                    }
+                case Operation.Minus:
+                    {
+                        bool startWithMinus = str.StartsWith("-");
+                        List<string> parts = str.Split(new string[1] { "-" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        for (int iter = 0; iter < parts.Count; iter++)
+                            if (iter != 0 || startWithMinus)
+                                result.Add(new SimplePart(parts[iter], operation));
+                            else result.Add(new SimplePart(parts[iter]));
+                        break;
+                    }
+                case Operation.Myltiplication:
+                    {
+                        List<string> parts = str.Split(new string[1] { "*" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        for (int iter = 0; iter < parts.Count; iter++)
+                            if (iter != 0)
+                                result.Add(new SimplePart(parts[iter], operation));
+                            else result.Add(new SimplePart(parts[iter]));
+                        break;
+                    }
+                case Operation.Div:
+                    {
+                        List<string> parts = str.Split(new string[1] { "/" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        for (int iter = 0; iter < parts.Count; iter++)
+                            if (iter != 0)
+                                result.Add(new SimplePart(parts[iter], operation));
+                            else result.Add(new SimplePart(parts[iter]));
+                        break;
+                    }
+                case Operation.Degree:
+                    {
+                        List<string> parts = str.Split(new string[1] { "^" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        for (int iter = 0; iter < parts.Count; iter++)
+                            if (iter != 0)
+                                result.Add(new SimplePart(parts[iter], operation));
+                            else result.Add(new SimplePart(parts[iter]));
+                        break;
+                    }
+                case Operation.Sin:
+                    {
+                        List<string> parts = str.Split(new string[1] { "sin" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        for (int iter = 0; iter < parts.Count; iter++)
+                                result.Add(new SimplePart(parts[iter], operation));
+                        break;
+                    }
+                case Operation.Cos:
+                    {
+                        List<string> parts = str.Split(new string[1] { "cos" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        for (int iter = 0; iter < parts.Count; iter++)
+                                result.Add(new SimplePart(parts[iter], operation));
+                        break;
+                    }
+                default:
+                    throw new Exception("SimplePart.GetPartByOperations(). Bad operation");
+            }
+
+            return result;
+
         }
 
     }

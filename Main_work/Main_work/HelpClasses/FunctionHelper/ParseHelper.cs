@@ -65,7 +65,8 @@ namespace Main_work.HelpClasses
                     termValue = myTerms[iter],
                     operation = Start
                 };
-                result.Add(tmp); 
+                if (!string.IsNullOrEmpty(tmp.termValue))
+                    result.Add(tmp); 
             }
 
             return result;
