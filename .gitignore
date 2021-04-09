@@ -35,6 +35,10 @@
 *.xml
 */bin/*
 */obj/*
-*obj/Debug/*
+*/obj/Debug/*
 */.vs/*
 */packages/*
+Main_work/Main_work/bin/*
+Main_work/Main_work/obj/*
+Main_work/NUnitTest/bin/*
+Main_work/NUnitTest/obj/*

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Main_work.HelpClasses
+namespace Main_work.Function
 {
     public class FunctionInformation
     {

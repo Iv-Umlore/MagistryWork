@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Main_work.HelpClasses;
+using Main_work.Function;
 
-namespace Main_work.HelpClasses
+namespace Main_work.MinimumSearchMethodExecutors
 {
     public class MinimumSearchMethodExecutor
     {

@@ -117,7 +117,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Function\FunctionInformation_V1.cs" />
+    <Compile Include="Function\FunctionInformation_V2.cs" />
+    <Compile Include="Function\FunctionPart\SimplePart.cs" />
+    <Compile Include="Function\FunctionPart\Term.cs" />
+    <Compile Include="HelpClasses\FunctionHelper\FunctionCreated.cs" />
     <Compile Include="HelpClasses\Interval.cs" />
+    <Compile Include="HelpClasses\FunctionHelper\Operations.cs" />
+    <Compile Include="HelpClasses\FunctionHelper\ParseHelper.cs" />
     <Compile Include="MinimumSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,8 +132,7 @@
       <DependentUpon>MinimumSearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HelpClasses\Enums.cs" />
-    <Compile Include="HelpClasses\FunctionInformation.cs" />
-    <Compile Include="HelpClasses\MinimumSearchMethodExecutor.cs" />
+    <Compile Include="MinimumSearchMethodExecutors\MinimumSearchMethodExecutor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MinimumSearchForm.resx">
@@ -154,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parser\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
