@@ -16,7 +16,7 @@ namespace Main_work.HelpClasses
     {
         public static List<string> GetTermsByBrackets(string term)
         {
-            var tmp = term.Split('(').ToList();
+            var tmp = term.Split(new string[] { "(" }, StringSplitOptions.RemoveEmptyEntries).ToList();
             List<string> myTerms = new List<string>();
 
             foreach (var t in tmp)
@@ -56,8 +56,12 @@ namespace Main_work.HelpClasses
 
                 myTerms[iter] = ClearFromSEOperations(myTerms[iter], Start, End);
 
-                if (PrevOperation != Operation.Unknown)
-                    Start = PrevOperation;
+                if (PrevOperation != Operation.Unknown)                    
+                        Start = PrevOperation;
+
+                if (Start == Operation.Unknown)
+                    Start = Operation.Plus;
+
                 PrevOperation = End;
 
                 var tmp = new TermInfo()
