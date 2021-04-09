@@ -15,7 +15,7 @@ namespace NUnitTest
         }
 
         [Test]
-        public void FirstTest()
+        public void AA_First_Test()
         {
             Assert.Pass();
         }        
@@ -539,7 +539,7 @@ namespace NUnitTest
 
             Assert.AreEqual(5.0, sP.GetValue(), delta);
         }
-
+        
         #endregion
 
         #region Работа с несколькими переменными
@@ -676,6 +676,52 @@ namespace NUnitTest
             var value = sP.GetValue();
 
             Assert.AreEqual(0.0, value, delta);
+        }
+
+        #endregion
+
+
+        #region Работа с отрицательными числами
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test1()
+        {
+            SimplePart sP = new SimplePart("x - - 3");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(1.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test2()
+        {
+            SimplePart sP = new SimplePart("x * -3");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(6.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test3()
+        {
+            SimplePart sP = new SimplePart("t + (-2 + x)");
+
+            sP.FixValue("x", -2.0);
+            sP.FixValue("t", 4.0);
+
+            Assert.AreEqual(0.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test4()
+        {
+            SimplePart sP = new SimplePart("3 + (-x) * 4");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(11.0, sP.GetValue(), delta);
         }
 
         #endregion

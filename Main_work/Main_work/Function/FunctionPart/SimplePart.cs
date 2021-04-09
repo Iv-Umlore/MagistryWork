@@ -32,28 +32,8 @@ namespace Main_work.Function.FunctionPart
             str = str.Replace(" ", "");
             Part = str;
             IsFinal = true;
-            {           
-
-                if (str.Contains("+") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Plus);
-
-                if (str.Contains("-") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Minus);
-
-                if (str.Contains("*") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Myltiplication);
-
-                if (str.Contains("/") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Div);
-
-                if (str.Contains("sin") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Sin);
-
-                if (str.Contains("cos") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Cos);
-
-                if (str.Contains("^") && IsFinal)
-                    _parts = GetPartByOperations(str, Operation.Degree);
+            {
+                _parts = GetSimpleParts(str, true);
 
                 if (str.Contains("(") && (IsFinal || IsSingleBracket))
                 {
@@ -184,12 +164,12 @@ namespace Main_work.Function.FunctionPart
                         var count = parts.Count;
 
                         parts = CorrectTermsByBrackets(parts, "-");
-
-                        if (count == parts.Count || !IsSingleBracket)
-                            for (int iter = 0; iter < parts.Count; iter++)
-                                if (iter != 0 || startWithMinus)
-                                    result.Add(new SimplePart(parts[iter], operation));
-                                else result.Add(new SimplePart(parts[iter]));
+                        
+                            if (count == parts.Count || !IsSingleBracket)
+                                for (int iter = 0; iter < parts.Count; iter++)
+                                    if (iter != 0 || startWithMinus)
+                                        result.Add(new SimplePart(parts[iter], operation));
+                                    else result.Add(new SimplePart(parts[iter]));
                         IsSingleBracket = false;
                         break;
                     }
@@ -311,6 +291,38 @@ namespace Main_work.Function.FunctionPart
                 if (str[i] == chr) result++;
 
             return result;
+        }
+
+        private List<SimplePart> GetSimpleParts(string str, bool IsConstructor = false)
+        {
+            var result = new List<SimplePart>();
+            
+            if (str.Contains("+") && IsFinal)
+                result = GetPartByOperations(str, Operation.Plus);
+
+            if (str.Contains("-") && IsFinal)
+                result = GetPartByOperations(str, Operation.Minus);
+
+            if (str.Contains("*") && IsFinal)
+                result = GetPartByOperations(str, Operation.Myltiplication);
+
+            if (str.Contains("/") && IsFinal)
+                result = GetPartByOperations(str, Operation.Div);
+
+            if (str.Contains("sin") && IsFinal)
+                result = GetPartByOperations(str, Operation.Sin);
+
+            if (str.Contains("cos") && IsFinal)
+                result = GetPartByOperations(str, Operation.Cos);
+
+            if (str.Contains("^") && IsFinal)
+                result = GetPartByOperations(str, Operation.Degree);
+
+            if (result.Count == 0 && !IsConstructor)
+                result.Add(new SimplePart(str));
+
+            return result;
+
         }
 
     }
