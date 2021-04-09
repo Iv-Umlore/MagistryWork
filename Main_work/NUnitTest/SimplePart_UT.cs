@@ -444,7 +444,7 @@ namespace NUnitTest
         }
         
         [Test]
-        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1()
+        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_1()
         {
             SimplePart sP = new SimplePart("-3 ^ x + 4 * 2");
 
@@ -459,7 +459,7 @@ namespace NUnitTest
         }
 
         [Test]
-        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_1()
+        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_2()
         {
             SimplePart sP = new SimplePart("(-3) ^ x + 4 * 2");
 
@@ -472,6 +472,22 @@ namespace NUnitTest
             // соответственно иж раскрытие происходит в самый последний момент
 
             Assert.AreEqual(17.0, value, delta);
+        }
+
+        [Test]
+        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_3()
+        {
+            SimplePart sP = new SimplePart("x ^ -3 + 4 * 2");
+
+            sP.FixValue("x", 2.0);
+
+            var value = sP.GetValue();
+
+            //todo
+            // Скобки в данном случае являются самой первой обнаруживаемой операцией,
+            // соответственно иж раскрытие происходит в самый последний момент
+
+            Assert.AreEqual(8.125, value, delta);
         }
 
         [Test]
