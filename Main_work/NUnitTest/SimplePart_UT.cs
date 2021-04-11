@@ -680,8 +680,7 @@ namespace NUnitTest
 
         #endregion
 
-
-        #region Работа с отрицательными числами
+        #region Работа с отрицательными числами (Bad Practice)
 
         [Test]
         public void G_NegativeNumber_BadPractice_Test1()
@@ -734,7 +733,65 @@ namespace NUnitTest
             Assert.AreEqual(11.0, sP.GetValue(), delta);
         }
 
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test5()
+        {
+            SimplePart sP = new SimplePart("(3 + x) * (4 - x)");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(6.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test6()
+        {
+            SimplePart sP = new SimplePart("((3 + x) * 4) - x");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(6.0, sP.GetValue(), delta);
+        }
+
         #endregion
+
+        #region Exception region
+
+        [Test]
+        public void Z_Exception_AssertExeptionWithBadStr_Test()
+        {
+            Exception exception = new Exception();
+            try
+            {
+                SimplePart sP = new SimplePart("((3x + x) * 4) - x");
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            Assert.AreEqual("Конструктор SimplePart:\nОшибка парсинга числа, убедитесь, что код работает верно и что это число: 3x", exception.Message);
+        }
+
+        [Test]
+        public void Z_Exception_AssertExeptionGetValueNotFixedVariables_Test()
+        {
+            Exception exception = new Exception();            
+            SimplePart sP = new SimplePart("((3 + y) * 4) - x");
+            sP.FixValue("x", 4.0);
+            try
+            {
+                var value = sP.GetValue();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            Assert.AreEqual("SimplePart.GetValue()\nError: Попытка получить значение из незаданного объекта: y", exception.Message);
+        }
         
+        #endregion
+
     }
 }

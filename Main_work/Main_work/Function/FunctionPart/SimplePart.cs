@@ -263,23 +263,7 @@ namespace Main_work.Function.FunctionPart
 
             int length = list.Count;
 
-            for (int iter = 0; iter < list.Count; iter++)
-                if (GetCharCount(list[iter], '(') > GetCharCount(list[iter], ')')) 
-                {
-                    var tmp = list.LastOrDefault(it => GetCharCount(it, '(') < GetCharCount(it, ')'));
-                    var index = list.IndexOf(tmp);
-
-                    string fullStr = "";
-
-                    for (int i = index; i >= iter; i--)
-                        if (i > iter)
-                            fullStr += list[iter + index - i] + operation;
-                        else fullStr += list[iter + index - i];
-                    
-                    list.RemoveRange(iter, index - iter + 1);
-
-                    list.Insert(iter, fullStr);
-                }
+            list = ParseHelper.CorrectSeparationByBracket(list, operation);
 
             if (list.Count == 1)
                 IsSingleBracket = true;
@@ -290,39 +274,16 @@ namespace Main_work.Function.FunctionPart
             return list;
         }
 
-        private int GetCharCount(string str, char chr)
-        {
-            int result = 0;
-            for (int i = 0; i < str.Length; i++)
-                if (str[i] == chr) result++;
-
-            return result;
-        }
 
         private List<SimplePart> GetSimpleParts(string str, bool IsConstructor = false)
         {
             var result = new List<SimplePart>();
-            
-            if (str.Contains("+") && IsFinal)
-                result = GetPartByOperations(str, Operation.Plus);
 
-            if (str.Contains("-") && IsFinal)
-                result = GetPartByOperations(str, Operation.Minus);
+            List<string> operations = Operations.GetOperations();
 
-            if (str.Contains("*") && IsFinal)
-                result = GetPartByOperations(str, Operation.Myltiplication);
-
-            if (str.Contains("/") && IsFinal)
-                result = GetPartByOperations(str, Operation.Div);
-
-            if (str.Contains("sin") && IsFinal)
-                result = GetPartByOperations(str, Operation.Sin);
-
-            if (str.Contains("cos") && IsFinal)
-                result = GetPartByOperations(str, Operation.Cos);
-
-            if (str.Contains("^") && IsFinal)
-                result = GetPartByOperations(str, Operation.Degree);
+            foreach (string operation in operations)
+                if (str.Contains(operation) && IsFinal)
+                    result = GetPartByOperations(str, Operations.GetOperation(operation));
 
             if (result.Count == 0 && !IsConstructor)
                 result.Add(new SimplePart(str));
