@@ -10,6 +10,11 @@ namespace Main_work.Function.FunctionPart
     /// </summary>
     public class SimplePart
     {
+        /// <summary>
+        /// Показатель что знак, который делит выражение находится внутри скобок
+        /// </summary>
+        private bool IsSingleBracket;
+
         public bool IsFinal;
         public bool IsValue;
                 
@@ -25,11 +30,15 @@ namespace Main_work.Function.FunctionPart
 
         public SimplePart(string str, Operation operation = Operation.Plus)
         {
+            IsSingleBracket = false;
+
             str = str.Replace(" ", "");
             Part = str;
             IsFinal = true;
             {
-                if (str.Contains("("))
+                _parts = GetSimpleParts(str, true);
+
+                if (str.Contains("(") && (IsFinal || IsSingleBracket))
                 {
                     IsFinal = false;
                     List<string> parts = ParseHelper.GetTermsByBrackets(str);
@@ -41,47 +50,6 @@ namespace Main_work.Function.FunctionPart
                         _parts.Add(new SimplePart(part.termValue, part.operation));
                 }
 
-                if (str.Contains("+") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Plus);
-                }
-
-                if (str.Contains("-") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Minus);
-                }
-
-                if (str.Contains("*") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Myltiplication);
-                }
-
-                if (str.Contains("/") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Div);
-                }
-
-                if (str.Contains("sin") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Sin);
-                }
-
-                if (str.Contains("cos") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Cos);
-                }
-
-                if (str.Contains("^") && IsFinal)
-                {
-                    IsFinal = false;
-                    _parts = GetPartByOperations(str, Operation.Degree);
-                }
             }
             MyOperation = operation;
 
@@ -171,8 +139,7 @@ namespace Main_work.Function.FunctionPart
 
             return result;
         }
-
-        //todo SimplePart: Тесты на эту срань
+        
         private List<SimplePart> GetPartByOperations(string str, Operation operation)
         {
             var result = new List<SimplePart>();
@@ -182,70 +149,143 @@ namespace Main_work.Function.FunctionPart
                 case Operation.Plus:
                     {
                         List<string> parts = str.Split('+').ToList();
+                        var count = parts.Count;
+
+                        parts = CorrectTermsByBrackets(parts, "+");
+
+                        if (count == parts.Count || !IsSingleBracket)
                         foreach (var part in parts)
                             result.Add(new SimplePart(part, operation));
+                        IsSingleBracket = false;
                         break;
                     }
                 case Operation.Minus:
                     {
                         bool startWithMinus = str.StartsWith("-");
                         List<string> parts = str.Split(new string[1] { "-" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var count = parts.Count;
 
-                        for (int iter = 0; iter < parts.Count; iter++)
-                            if (iter != 0 || startWithMinus)
-                                result.Add(new SimplePart(parts[iter], operation));
-                            else result.Add(new SimplePart(parts[iter]));
+                        parts = CorrectTermsByBrackets(parts, "-");
+
+                        if (count == parts.Count || !IsSingleBracket)
+                        {
+                            for (int iter = 0; iter < parts.Count; iter++)
+                                if (iter != 0 || startWithMinus)
+                                    result.Add(new SimplePart(parts[iter], operation));
+                                else result.Add(new SimplePart(parts[iter]));
+                            
+                        }
+                        IsSingleBracket = false;
                         break;
                     }
                 case Operation.Myltiplication:
                     {
                         List<string> parts = str.Split(new string[1] { "*" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var count = parts.Count;
 
-                        for (int iter = 0; iter < parts.Count; iter++)
-                            if (iter != 0)
-                                result.Add(new SimplePart(parts[iter], operation));
-                            else result.Add(new SimplePart(parts[iter]));
+                        parts = CorrectTermsByBrackets(parts, "*");
+
+                        if (count == parts.Count || !IsSingleBracket)
+                            for (int iter = 0; iter < parts.Count; iter++)
+                                if (iter != 0)
+                                    result.Add(new SimplePart(parts[iter], operation));
+                                else result.Add(new SimplePart(parts[iter]));
+                        IsSingleBracket = false;
                         break;
                     }
                 case Operation.Div:
                     {
                         List<string> parts = str.Split(new string[1] { "/" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var count = parts.Count;
 
-                        for (int iter = 0; iter < parts.Count; iter++)
-                            if (iter != 0)
-                                result.Add(new SimplePart(parts[iter], operation));
-                            else result.Add(new SimplePart(parts[iter]));
+                        parts = CorrectTermsByBrackets(parts, "/");
+
+                        if (count == parts.Count || !IsSingleBracket)
+                            for (int iter = 0; iter < parts.Count; iter++)
+                                if (iter != 0)
+                                    result.Add(new SimplePart(parts[iter], operation));
+                                else result.Add(new SimplePart(parts[iter]));
+                        IsSingleBracket = false;
                         break;
                     }
                 case Operation.Degree:
                     {
                         List<string> parts = str.Split(new string[1] { "^" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var count = parts.Count;
 
-                        for (int iter = 0; iter < parts.Count; iter++)
-                            if (iter != 0)
-                                result.Add(new SimplePart(parts[iter], operation));
-                            else result.Add(new SimplePart(parts[iter]));
+                        parts = CorrectTermsByBrackets(parts, "^");
+
+                        if (count == parts.Count || !IsSingleBracket)
+                            for (int iter = 0; iter < parts.Count; iter++)
+                                if (iter != 0)
+                                    result.Add(new SimplePart(parts[iter], operation));
+                                else result.Add(new SimplePart(parts[iter]));
+                        IsSingleBracket = false;
                         break;
                     }
                 case Operation.Sin:
                     {
                         List<string> parts = str.Split(new string[1] { "sin" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var count = parts.Count;
 
-                        for (int iter = 0; iter < parts.Count; iter++)
+                        parts = CorrectTermsByBrackets(parts, "sin");
+
+                        if (count == parts.Count || !IsSingleBracket)
+                            for (int iter = 0; iter < parts.Count; iter++)
                                 result.Add(new SimplePart(parts[iter], operation));
+                        IsSingleBracket = false;
                         break;
                     }
                 case Operation.Cos:
                     {
                         List<string> parts = str.Split(new string[1] { "cos" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var count = parts.Count;
 
-                        for (int iter = 0; iter < parts.Count; iter++)
+                        parts = CorrectTermsByBrackets(parts, "cos");
+
+                        if (count == parts.Count || !IsSingleBracket)
+                            for (int iter = 0; iter < parts.Count; iter++)
                                 result.Add(new SimplePart(parts[iter], operation));
+                        IsSingleBracket = false;
                         break;
                     }
                 default:
                     throw new Exception("SimplePart.GetPartByOperations(). Bad operation");
             }
+
+            return result;
+
+        }
+
+        private List<string> CorrectTermsByBrackets(List<string> list, string operation)
+        {
+
+            int length = list.Count;
+
+            list = ParseHelper.CorrectSeparationByBracket(list, operation);
+
+            if (list.Count == 1)
+                IsSingleBracket = true;
+
+            if (length == list.Count)
+                IsFinal = false;
+
+            return list;
+        }
+
+
+        private List<SimplePart> GetSimpleParts(string str, bool IsConstructor = false)
+        {
+            var result = new List<SimplePart>();
+
+            List<string> operations = Operations.GetOperations();
+
+            foreach (string operation in operations)
+                if (str.Contains(operation) && IsFinal)
+                    result = GetPartByOperations(str, Operations.GetOperation(operation));
+
+            if (result.Count == 0 && !IsConstructor)
+                result.Add(new SimplePart(str));
 
             return result;
 

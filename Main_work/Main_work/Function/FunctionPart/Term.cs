@@ -11,19 +11,18 @@ namespace Main_work.Function.FunctionPart
 
         private List<string> _variables;
         private List<SimplePart> _parts;
-        Operation _termOperation;
+        public Operation TermOperation { get; private set; }
 
         public Term(string functionPart, Operation termOperation)
         {
-            _termOperation = termOperation;
-
+            TermOperation = termOperation;
+            _variables = new List<string>();
             functionPart = functionPart.Replace(" ", "");
-
-            if (functionPart.Contains("((") || functionPart.Contains("))"))
-                throw new Exception("Функционал с двойными скобками не реализован на данный момент. Исключите из записи (( или ))");
-
+            
             List<string> myTerms = ParseHelper.GetTermsByBrackets(functionPart);
-            var parts = ParseHelper.GetTermsInfo(myTerms);
+            var parts = (myTerms.Count > 1) ? 
+                ParseHelper.GetTermsInfo(myTerms) : 
+                new List<TermInfo> { new TermInfo { termValue = myTerms[0], operation = Operation.Plus } };
 
             _parts = new List<SimplePart>();
             foreach (var part in parts)
@@ -32,7 +31,8 @@ namespace Main_work.Function.FunctionPart
             foreach (var part in _parts)
             {
                 var tmpList = part.GetVariables().Where(it => !_variables.Contains(it)).ToList();
-                _variables.AddRange(tmpList);
+                if (tmpList.Count > 0)
+                    _variables.AddRange(tmpList);
             }
 
         }
@@ -44,22 +44,41 @@ namespace Main_work.Function.FunctionPart
         
         public void FixValue(string variable, double value)
         {
-
+            foreach (var part in _parts)
+                if (part.GetVariables().Contains(variable))
+                    part.FixValue(variable, value);
         }
 
         public void CanselFix(string variable)
         {
-
+            foreach (var part in _parts)
+                if (part.GetVariables().Contains(variable))
+                    part.CanselFix(variable);
         }
         
         public double GetValue(Dictionary<string, double> variablesValue)
         {
-            return 0.0;
+            double result = 0.0;
+
+            foreach(var part in _parts)
+            {
+                foreach (var pair in variablesValue)
+                    part.FixValue(pair.Key, pair.Value);
+                result = Operations.GetNewValue(result, part.GetValue(), part.MyOperation);
+                foreach (var pair in variablesValue)
+                    part.CanselFix(pair.Key);
+            }
+
+            return result;
         }
 
         public double GetValue()
         {
-            return 0.0;
+            double result = 0.0;
+            foreach (var part in _parts)
+                result = Operations.GetNewValue(result, part.GetValue(), part.MyOperation);
+
+            return result;
         }
 
     }

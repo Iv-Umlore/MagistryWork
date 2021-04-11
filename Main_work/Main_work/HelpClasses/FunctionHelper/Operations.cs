@@ -69,6 +69,7 @@ namespace Main_work.HelpClasses
                 case Operation.Myltiplication:
                     return lastValue * changeValue;
                 case Operation.Div:
+                    if (changeValue == 0.0) throw new Exception("Operations.GetNewValue() Error\nПопытка делить на 0");
                     return lastValue / changeValue;
                 case Operation.Degree:
                     return Math.Pow(lastValue, changeValue);

@@ -15,7 +15,7 @@ namespace NUnitTest
         }
 
         [Test]
-        public void FirstTest()
+        public void AA_First_Test()
         {
             Assert.Pass();
         }        
@@ -444,7 +444,7 @@ namespace NUnitTest
         }
         
         [Test]
-        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1()
+        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_1()
         {
             SimplePart sP = new SimplePart("-3 ^ x + 4 * 2");
 
@@ -459,7 +459,7 @@ namespace NUnitTest
         }
 
         [Test]
-        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_1()
+        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_2()
         {
             SimplePart sP = new SimplePart("(-3) ^ x + 4 * 2");
 
@@ -472,6 +472,22 @@ namespace NUnitTest
             // соответственно иж раскрытие происходит в самый последний момент
 
             Assert.AreEqual(17.0, value, delta);
+        }
+
+        [Test]
+        public void E_SomeOperations_PlusWithMyltiplyWithDegree_Test1_3()
+        {
+            SimplePart sP = new SimplePart("x ^ -3 + 4 * 2");
+
+            sP.FixValue("x", 2.0);
+
+            var value = sP.GetValue();
+
+            //todo
+            // Скобки в данном случае являются самой первой обнаруживаемой операцией,
+            // соответственно иж раскрытие происходит в самый последний момент
+
+            Assert.AreEqual(8.125, value, delta);
         }
 
         [Test]
@@ -523,7 +539,7 @@ namespace NUnitTest
 
             Assert.AreEqual(5.0, sP.GetValue(), delta);
         }
-
+        
         #endregion
 
         #region Работа с несколькими переменными
@@ -663,5 +679,119 @@ namespace NUnitTest
         }
 
         #endregion
+
+        #region Работа с отрицательными числами (Bad Practice)
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test1()
+        {
+            SimplePart sP = new SimplePart("x - - 3");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(1.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test1_1()
+        {
+            SimplePart sP = new SimplePart("x - (- 3)");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(1.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test2()
+        {
+            SimplePart sP = new SimplePart("x * -3");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(6.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test3()
+        {
+            SimplePart sP = new SimplePart("t + (-2 + x)");
+
+            sP.FixValue("x", -2.0);
+            sP.FixValue("t", 4.0);
+
+            Assert.AreEqual(0.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test4()
+        {
+            SimplePart sP = new SimplePart("3 + (-x) * 4");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(11.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test5()
+        {
+            SimplePart sP = new SimplePart("(3 + x) * (4 - x)");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(6.0, sP.GetValue(), delta);
+        }
+
+        [Test]
+        public void G_NegativeNumber_BadPractice_Test6()
+        {
+            SimplePart sP = new SimplePart("((3 + x) * 4) - x");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(6.0, sP.GetValue(), delta);
+        }
+
+        #endregion
+
+        #region Exception region
+
+        [Test]
+        public void Z_Exception_AssertExeptionWithBadStr_Test()
+        {
+            Exception exception = new Exception();
+            try
+            {
+                SimplePart sP = new SimplePart("((3x + x) * 4) - x");
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            Assert.AreEqual("Конструктор SimplePart:\nОшибка парсинга числа, убедитесь, что код работает верно и что это число: 3x", exception.Message);
+        }
+
+        [Test]
+        public void Z_Exception_AssertExeptionGetValueNotFixedVariables_Test()
+        {
+            Exception exception = new Exception();            
+            SimplePart sP = new SimplePart("((3 + y) * 4) - x");
+            sP.FixValue("x", 4.0);
+            try
+            {
+                var value = sP.GetValue();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            Assert.AreEqual("SimplePart.GetValue()\nError: Попытка получить значение из незаданного объекта: y", exception.Message);
+        }
+        
+        #endregion
+
     }
 }
