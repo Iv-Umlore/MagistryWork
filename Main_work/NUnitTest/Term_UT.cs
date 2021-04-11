@@ -175,5 +175,62 @@ namespace NUnitTest
         }
 
         #endregion
+
+        #region Скобка на скобку
+
+        [Test]
+        public void D_DoobleBrackets_BracketByBracketMylt_Test()
+        {
+            Term T = new Term("(x * 4) * (5 - x)", Operation.Plus);
+
+            T.FixValue("x", 3);
+
+            Assert.AreEqual(24.0, T.GetValue(), delta);
+        }
+
+        [Test]
+        public void D_DoobleBrackets_BracketByBracketDeegre_Test()
+        {
+            Term T = new Term("(x * 2) ^ (5 - x)", Operation.Plus);
+
+            T.FixValue("x", 3);
+
+            Assert.AreEqual(36.0, T.GetValue(), delta);
+        }
+
+        [Test]
+        public void D_DoobleBrackets_BracketByBracketDiv_Test()
+        {
+            Term T = new Term("(x * 2) / (5 - x)", Operation.Plus);
+
+            T.FixValue("x", 3);
+
+            Assert.AreEqual(3.0, T.GetValue(), delta);
+        }
+
+        [Test]
+        public void D_TrippleBacket_B_Div_BB_Degree_BB_Test()
+        {
+            Term T = new Term("(x * 2) / ((5 - x) ^ (-3))", Operation.Plus);
+
+            T.FixValue("x", 3);
+
+            Assert.AreEqual(48.0, T.GetValue(), delta);
+        }
+
+        //todo Кривой порядок выполнения действий
+        //todo Попробовать в Термах сортировать по знаку действия
+
+        [Test]
+        public void D_TrippleBacket_B_Div_B_Degree_B_Test()
+        {
+            Term T = new Term("(x * 2) / (5 - x) ^ (-3)", Operation.Plus);
+
+            T.FixValue("x", 3);
+
+            Assert.AreEqual(48.0, T.GetValue(), delta);
+        }
+
+        #endregion
     }
 }

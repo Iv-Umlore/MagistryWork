@@ -51,7 +51,7 @@ namespace Main_work.HelpClasses
             return result;
         }
 
-        public static List<TermInfo> GetTermsInfo(List<string> myTerms)
+        public static List<TermInfo> GetTermsInfo(List<string> myTerms, bool IsFunction = false)
         {
             List<TermInfo> result = new List<TermInfo>();
 
@@ -77,9 +77,9 @@ namespace Main_work.HelpClasses
                 if (PrevOperation != Operation.Unknown)
                     Start = PrevOperation;
 
-                myTerms[iter] = ClearFromSEOperations(myTerms[iter], Start, End, Start == PrevOperation);
+                myTerms[iter] = ClearFromSEOperations(myTerms[iter], Start, End, IsFunction, Start == PrevOperation);
                 
-                if (Start == Operation.Unknown)
+                if (Start == Operation.Unknown || (Start != Operation.Minus && Start != Operation.Plus) && IsFunction)
                     Start = Operation.Plus;
 
                 PrevOperation = End;
@@ -119,8 +119,6 @@ namespace Main_work.HelpClasses
             return list;
 
         }
-        
-        //static public List<SimplePart>
 
         static private int GetCharCount(string str, char chr)
         {
@@ -131,9 +129,9 @@ namespace Main_work.HelpClasses
             return result;
         }
 
-        private static string ClearFromSEOperations(string str, Operation Start, Operation End, bool doubleOperations = false)
+        private static string ClearFromSEOperations(string str, Operation Start, Operation End, bool IsFunction, bool doubleOperations = false)
         {
-            if (str.StartsWith(Operations.ConvertToString(Start)) && !doubleOperations)
+            if (str.StartsWith(Operations.ConvertToString(Start)) && !doubleOperations && !IsFunction)
                 str = str.Substring(Operations.ConvertToString(Start).Length);
 
             if (str.EndsWith(Operations.ConvertToString(End)))

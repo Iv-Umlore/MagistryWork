@@ -139,8 +139,7 @@ namespace Main_work.Function.FunctionPart
 
             return result;
         }
-
-        //todo SimplePart: Тесты на эту срань
+        
         private List<SimplePart> GetPartByOperations(string str, Operation operation)
         {
             var result = new List<SimplePart>();

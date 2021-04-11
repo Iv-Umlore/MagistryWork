@@ -58,7 +58,18 @@ namespace Main_work.Function.FunctionPart
         
         public double GetValue(Dictionary<string, double> variablesValue)
         {
-            return 0.0;
+            double result = 0.0;
+
+            foreach(var part in _parts)
+            {
+                foreach (var pair in variablesValue)
+                    part.FixValue(pair.Key, pair.Value);
+                result = Operations.GetNewValue(result, part.GetValue(), part.MyOperation);
+                foreach (var pair in variablesValue)
+                    part.CanselFix(pair.Key);
+            }
+
+            return result;
         }
 
         public double GetValue()

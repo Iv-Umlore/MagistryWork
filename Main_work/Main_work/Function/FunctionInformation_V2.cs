@@ -15,22 +15,31 @@ namespace Main_work.Function
 
         public FunctionInformation_V2(string function)
         {
-            List<string> termList = function.Split(new string[1] { "+" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            _variables = new List<string>();
+            function = function.Replace(" ", "");
 
-            termList = ParseHelper.CorrectSeparationByBracket(termList, "+");
+            List<string> termList = new List<string>();
+            int bracketCount = 0;
+            string tmpStr = "";
 
-            foreach (var term in termList)
+            for (int iter = 0; iter < function.Length; iter++)
             {
-                int index = termList.IndexOf(term);
+                tmpStr += function[iter];
+                if (function[iter] == '(') bracketCount++;
+                if (function[iter] == ')') bracketCount--;
+                if (bracketCount < 0) throw new Exception("Конструктор FunctionInformation_V2()\nОшибка расположения скобок. Число закрывающих скобок превысило число открывающих");
 
-                var tmpTermList = term.Split(new string[1] { "-" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                tmpTermList = ParseHelper.CorrectSeparationByBracket(tmpTermList, "-");
-
-                termList.RemoveAt(index);
-                termList.InsertRange(index, tmpTermList);
+                if ((function[iter] == '+' || function[iter] == '-') && bracketCount == 0)
+                {
+                    termList.Add(tmpStr);
+                    tmpStr = "";
+                }
             }
 
-            var termsInfo = ParseHelper.GetTermsInfo(termList);
+            if (!string.IsNullOrEmpty(tmpStr))
+                termList.Add(tmpStr);
+
+            var termsInfo = ParseHelper.GetTermsInfo(termList, true);
 
             _terms = new List<Term>();
             foreach (var termI in termsInfo)
@@ -38,16 +47,16 @@ namespace Main_work.Function
             
             foreach (Term term in _terms)
             {
-                var tmpV = term.GetVariables();
-                foreach (var iter in tmpV)
-                    if (_variables.All(it => it != iter))
-                        _variables.Add(iter);
+                var tmpList = term.GetVariables().Where(it => !_variables.Contains(it)).ToList();
+                if (tmpList.Count > 0)
+                    _variables.AddRange(tmpList);
             }
         }
 
         public double GetValue(Dictionary<string, double> variablesValue)
         {
-            double result = 0.0;
+            double result = 0.0;            
+
             foreach (var term in _terms)
                 result = Operations.GetNewValue(result, term.GetValue(variablesValue), term.TermOperation);
             return result;
@@ -87,6 +96,20 @@ namespace Main_work.Function
                 if (iter.GetVariables().Any(it => it == variable))
                     iter.CanselFix(variable);
             }
+        }
+
+        public List<string> GetVariables()
+        {
+            return _variables;
+        }
+
+        /// <summary>
+        /// Для тестирования
+        /// </summary>
+        /// <returns></returns>
+        public int GetTermCount()
+        {
+            return _terms.Count;
         }
     }
 }
