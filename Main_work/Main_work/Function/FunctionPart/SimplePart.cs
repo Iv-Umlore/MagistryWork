@@ -10,6 +10,9 @@ namespace Main_work.Function.FunctionPart
     /// </summary>
     public class SimplePart
     {
+        /// <summary>
+        /// Показатель что знак, который делит выражение находится внутри скобок
+        /// </summary>
         private bool IsSingleBracket;
 
         public bool IsFinal;
@@ -164,12 +167,15 @@ namespace Main_work.Function.FunctionPart
                         var count = parts.Count;
 
                         parts = CorrectTermsByBrackets(parts, "-");
-                        
-                            if (count == parts.Count || !IsSingleBracket)
-                                for (int iter = 0; iter < parts.Count; iter++)
-                                    if (iter != 0 || startWithMinus)
-                                        result.Add(new SimplePart(parts[iter], operation));
-                                    else result.Add(new SimplePart(parts[iter]));
+
+                        if (count == parts.Count || !IsSingleBracket)
+                        {
+                            for (int iter = 0; iter < parts.Count; iter++)
+                                if (iter != 0 || startWithMinus)
+                                    result.Add(new SimplePart(parts[iter], operation));
+                                else result.Add(new SimplePart(parts[iter]));
+                            
+                        }
                         IsSingleBracket = false;
                         break;
                     }

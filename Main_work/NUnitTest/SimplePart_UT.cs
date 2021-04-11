@@ -694,6 +694,16 @@ namespace NUnitTest
         }
 
         [Test]
+        public void G_NegativeNumber_BadPractice_Test1_1()
+        {
+            SimplePart sP = new SimplePart("x - (- 3)");
+
+            sP.FixValue("x", -2.0);
+
+            Assert.AreEqual(1.0, sP.GetValue(), delta);
+        }
+
+        [Test]
         public void G_NegativeNumber_BadPractice_Test2()
         {
             SimplePart sP = new SimplePart("x * -3");
@@ -725,5 +735,6 @@ namespace NUnitTest
         }
 
         #endregion
+        
     }
 }

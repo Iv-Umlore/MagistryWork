@@ -44,12 +44,16 @@ namespace Main_work.Function.FunctionPart
         
         public void FixValue(string variable, double value)
         {
-
+            foreach (var part in _parts)
+                if (part.GetVariables().Contains(variable))
+                    part.FixValue(variable, value);
         }
 
         public void CanselFix(string variable)
         {
-
+            foreach (var part in _parts)
+                if (part.GetVariables().Contains(variable))
+                    part.CanselFix(variable);
         }
         
         public double GetValue(Dictionary<string, double> variablesValue)
